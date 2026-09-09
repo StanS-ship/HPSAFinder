@@ -6,7 +6,7 @@
   "main": "src/api/handler.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test tests/"
+    "test": "node --test tests/*.test.js"
   },
   "engines": {
     "node": ">=18.0.0"
