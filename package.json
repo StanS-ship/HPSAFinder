@@ -1,0 +1,17 @@
+{
+  "name": "hpsa-bonus-calculator",
+  "version": "0.1.0",
+  "description": "HRSA HPSA Medicare bonus calculator: geocodes an address, queries HRSA's HPSA GIS MapServer, and estimates the CMS 10% HPSA physician bonus.",
+  "type": "module",
+  "main": "src/api/handler.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {},
+  "devDependencies": {}
+}
