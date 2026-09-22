@@ -34,10 +34,13 @@ export async function geocodeWithGoogle(address, apiKey) {
   // ROOFTOP / RANGE_INTERPOLATED are strong matches; APPROXIMATE is weaker.
   const confidence = locationType === 'ROOFTOP' || locationType === 'RANGE_INTERPOLATED' ? 'high' : 'medium';
 
+  const stateComponent = (best.address_components || []).find((c) => c.types?.includes('administrative_area_level_1'));
+
   return {
     lat: best.geometry.location.lat,
     lon: best.geometry.location.lng,
     confidence,
     matchedAddress: best.formatted_address,
+    stateAbbr: stateComponent?.short_name ?? null,
   };
 }

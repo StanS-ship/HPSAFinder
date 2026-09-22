@@ -96,5 +96,6 @@ export async function geocodeWithCensus(address) {
     lon: best.coordinates.x,
     confidence,
     matchedAddress: best.matchedAddress,
+    stateAbbr: best.addressComponents?.state ?? null,
   };
 }
