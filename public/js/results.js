@@ -46,6 +46,7 @@
           <p>No CMS bonus applies for services furnished at this location under the selected specialty.</p>
           <a class="btn-secondary" href="index.html">Run another estimate</a>
         </div>
+        ${renderMuaCard(result.mua)}
         ${nonAffiliationDisclaimer()}`;
       return;
     }
@@ -92,6 +93,8 @@
           </dl>
         </div>
 
+        ${renderMuaCard(result.mua)}
+
         <div class="card">
           <div class="disclaimer">${escapeHtml(result.disclaimers.fullPartialCounty)}</div>
           ${nonAffiliationDisclaimer(true)}
@@ -100,6 +103,31 @@
     }
 
     root.innerHTML = `<div class="card"><div class="error-box">Unexpected result. Please try again.</div></div>`;
+  }
+
+  function renderMuaCard(mua) {
+    if (!mua) return '';
+
+    if (mua.error) {
+      return `
+        <div class="card">
+          <h2>Medically Underserved Area/Population (MUA/MUP) status</h2>
+          <div class="notice-box">We couldn't check MUA/MUP status for this location right now. This does not affect the HPSA bonus estimate above.</div>
+        </div>`;
+    }
+
+    const activeFeature = mua.activeFeatures?.[0];
+
+    return `
+      <div class="card">
+        <h2>Medically Underserved Area/Population (MUA/MUP) status</h2>
+        ${
+          mua.isInMua
+            ? `<p>This location <strong>is</strong> within a designated MUA/MUP: <strong>${escapeHtml(activeFeature.service_area_name)}</strong> (${escapeHtml(activeFeature.designation_type_desc)}, ${escapeHtml(activeFeature.service_area_type_desc)}).</p>`
+            : `<p>This location is <strong>not</strong> within a currently designated MUA/MUP.</p>`
+        }
+        <div class="disclaimer">${escapeHtml(mua.note)}</div>
+      </div>`;
   }
 
   function labelForDiscipline(discipline) {
