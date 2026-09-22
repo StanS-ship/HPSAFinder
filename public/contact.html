@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact &amp; Disclaimer — HPSA Finder</title>
+  <meta name="description" content="Contact HPSA Finder and read our full disclaimers regarding HPSA designations and Medicare bonus estimates." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="index.html">
+        <div class="site-header__logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+        </div>
+        <div class="site-header__title">
+          <span>HPSA Finder</span>
+          <span>Shortage-Area Tools</span>
+        </div>
+      </a>
+      <nav class="site-header__nav">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="calculator.html">Bonus Calculator</a>
+        <a class="nav-link" href="j1-checker.html">J-1 Checker</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-content">
+      <a href="index.html" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Back to home
+      </a>
+
+      <h1 class="page-content__title">Contact &amp; Disclaimer</h1>
+      <p class="page-content__subtitle">Have a question about HPSA Finder or need help with your calculation? Send us a message and we'll get back to you.</p>
+
+      <div class="contact-form">
+        <form id="contact-form" novalidate>
+          <div class="contact-info">
+            <div class="field">
+              <label for="contact-name">Name</label>
+              <input type="text" id="contact-name" name="name" placeholder="Your name" />
+            </div>
+            <div class="field">
+              <label for="contact-email">Email</label>
+              <input type="text" id="contact-email" name="email" type="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" name="message" placeholder="How can we help?" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" id="contact-submit">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            Send message
+          </button>
+          <div id="contact-success" class="notice-box" hidden>Thanks for your message. We'll get back to you soon.</div>
+          <div id="contact-error" class="error-box" hidden>Please enter a message before sending.</div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Non-Affiliation Disclaimer</h2>
+        <p>This calculator is an independent tool and is not affiliated with or endorsed by HRSA or CMS. Bonus eligibility and payment are determined solely by CMS based on official Medicare rules and HRSA's shortage-area designations. Always verify your eligibility and exact bonus amounts using official CMS and HRSA resources before making billing or contractual decisions.</p>
+      </div>
+
+      <div class="card">
+        <h2>Full &amp; Partial-County HPSAs</h2>
+        <p>This tool identifies whether your location falls within a designated HPSA. Some ZIP codes split across full- and partial-county HPSA boundaries may require an AQ modifier on claims. Verify your exact billing requirements with your MAC or CMS's published bonus ZIP code list.</p>
+      </div>
+
+      <div class="card">
+        <h2>Referral Fee Disclosure</h2>
+        <p>Some links and referrals on this site are to organizations we partner with. We may receive a referral fee or commission if you choose to connect with them or accept a position. Our recommendations are based on our assessment of their services, but you should consider this financial relationship when evaluating them.</p>
+      </div>
+
+      <div class="card">
+        <h2>Privacy</h2>
+        <p>For details about how we handle information, please see our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>
+        <div class="site-footer__brand">
+          <div class="site-footer__logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+          </div>
+          <span class="site-footer__brand-name">HPSA Finder</span>
+        </div>
+        <p class="site-footer__desc">A free tool for medical providers to check Health Professional Shortage Area designations and estimate Medicare bonus eligibility.</p>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Tools</h3>
+        <ul class="site-footer__links">
+          <li><a href="calculator.html">Bonus Calculator</a></li>
+          <li><a href="j1-checker.html">J-1 Visa Waiver Checker</a></li>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Resources</h3>
+        <ul class="site-footer__links">
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="contact.html">Contact &amp; Disclaimer</a></li>
+          <li><a href="https://data.hrsa.gov/topics/health-workforce/shortage-areas/hpsa-find" target="_blank" rel="noopener noreferrer">HRSA HPSA Find Tool</a></li>
+          <li><a href="https://www.cms.gov/" target="_blank" rel="noopener noreferrer">CMS Official Site</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      HPSA Finder is an independent tool and is not affiliated with or endorsed by HRSA, CMS, or any government agency. Always verify designation status through the official HRSA HPSA Query Tool before making billing or practice decisions.
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var form = document.getElementById('contact-form');
+      var success = document.getElementById('contact-success');
+      var errorBox = document.getElementById('contact-error');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        success.hidden = true;
+        errorBox.hidden = true;
+        var msg = document.getElementById('contact-message').value.trim();
+        if (!msg) {
+          errorBox.hidden = false;
+          return;
+        }
+        success.hidden = false;
+        form.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
