@@ -138,3 +138,39 @@ export const CMS_BONUS_RATE = 0.10; // 10% of the amount Medicare actually pays
 export const DEFAULT_PAYMENT_FACTOR = Number(
   (typeof process !== 'undefined' && process.env && process.env.DEFAULT_PAYMENT_FACTOR) || 1.0
 );
+
+/**
+ * J-1 Visa Waiver (Conrad 30 / HHS program) related constants.
+ *
+ * IMPORTANT SCOPE NOTE: Conrad 30 program rules vary by state and change
+ * annually (federal fiscal year), with no live, structured, HRSA-hosted
+ * API the way HPSA/MUA data has. This app deliberately does NOT attempt
+ * to encode each state's specific rules (score cutoffs, Medicaid-percent
+ * requirements, specialty priority, slot availability) — that data isn't
+ * available in a form that can be kept reliably current. Instead:
+ *   - We check the one federal-level constant that IS stable and
+ *     verifiable: the HHS J-1 Visa Waiver Program's HPSA score >= 7
+ *     threshold (a separate, unlimited-slot program from Conrad 30).
+ *   - We route the user to HRSA's own live-maintained directory of state
+ *     Primary Care Offices for anything state-specific, rather than
+ *     hardcoding 50 individual URLs that would go stale over time.
+ */
+
+/**
+ * Minimum HPSA score required for the separate, federally-run HHS J-1
+ * Visa Waiver Program (primary care / general psychiatry only, unlimited
+ * slots — distinct from the 30-slot state Conrad 30 programs). Verified
+ * against multiple state Primary Care Office program manuals and the
+ * Rural Health Information Hub's J-1 waiver overview.
+ */
+export const HHS_J1_PROGRAM_MIN_HPSA_SCORE = 7;
+
+/**
+ * HRSA's own, live-maintained directory of every state/territory Primary
+ * Care Office (the office that administers each state's Conrad 30
+ * program). Used as the single link-out destination for all states
+ * instead of hardcoding individual state program URLs, since HRSA keeps
+ * this page current and we cannot reliably do the same for 50+ pages.
+ */
+export const HRSA_STATE_PCO_DIRECTORY_URL =
+  'https://bhw.hrsa.gov/workforce-shortage-areas/shortage-designation/contact-state-primary-care-office';

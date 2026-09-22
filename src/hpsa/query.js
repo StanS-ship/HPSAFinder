@@ -110,6 +110,32 @@ export function isCurrentlyDesignated(feature) {
 }
 
 /**
+ * Query ALL THREE HPSA disciplines (primary care, mental health, dental)
+ * for a location, regardless of specialty. Used by the J-1 waiver
+ * eligibility check (Section: J-1 baseline), where any active geographic
+ * HPSA — of any discipline — counts toward the federal baseline
+ * requirement, unlike the Medicare bonus which is specialty-specific.
+ *
+ * @param {number} lon
+ * @param {number} lat
+ * @returns {Promise<{discipline: string, layerId: number, eligibleFeatures: HpsaAttributes[]}[]>}
+ */
+export async function queryAllHpsaDisciplines(lon, lat) {
+  const disciplines = Object.keys(HPSA_LAYER_IDS); // primary_care, mental_health, dental
+
+  const results = await Promise.all(
+    disciplines.map(async (discipline) => {
+      const layerId = HPSA_LAYER_IDS[discipline];
+      const allFeatures = await queryHpsaLayer(layerId, lon, lat);
+      const eligibleFeatures = allFeatures.filter((f) => isGeographicHpsa(f) && isCurrentlyDesignated(f));
+      return { discipline, layerId, eligibleFeatures };
+    })
+  );
+
+  return results;
+}
+
+/**
  * Given a specialty, run the correct layer query/queries and return only
  * the features that are geographic + currently designated (Section 5.1,
  * 5.3, 5.5). If a location happens to intersect more than one polygon in
