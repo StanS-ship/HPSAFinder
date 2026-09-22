@@ -1,10 +1,12 @@
 import { geocodeAddress } from '../geocoding/index.js';
 import { queryHpsaForSpecialty } from '../hpsa/query.js';
+import { checkMuaStatus } from '../mua/query.js';
 import { calculateBonus } from '../bonus/calculate.js';
 import {
   FULL_PARTIAL_COUNTY_DISCLAIMER,
   GEOCODE_FAILURE_MESSAGE,
   NOT_IN_HPSA_MESSAGE,
+  MUA_NO_BONUS_NOTE,
 } from '../consent/disclaimerText.js';
 import { HPSA_LAYER_IDS } from '../config/hrsaConfig.js';
 
@@ -60,8 +62,27 @@ export async function calculateHpsaBonus(input, options = {}) {
       message: GEOCODE_FAILURE_MESSAGE,
       geocode: null,
       hpsa: null,
+      mua: null,
       bonus: null,
     };
+  }
+
+  // MUA/MUP lookup is informational and independent of specialty/bonus —
+  // run it alongside the HPSA lookup rather than gating it on eligibility.
+  // A failure here should not block the HPSA/bonus result the user came
+  // for, so it's caught and surfaced as a soft error instead of thrown.
+  let mua = null;
+  try {
+    const muaStatus = await checkMuaStatus(geocode.lon, geocode.lat);
+    mua = {
+      isInMua: muaStatus.isInMua,
+      activeFeatures: muaStatus.activeFeatures,
+      note: MUA_NO_BONUS_NOTE,
+    };
+    onLog({ muaChecked: true, isInMua: muaStatus.isInMua });
+  } catch (err) {
+    mua = { error: err.message, note: MUA_NO_BONUS_NOTE };
+    onLog({ muaChecked: true, error: err.message });
   }
 
   // Step 2: query the layer relevant to the chosen specialty
@@ -97,6 +118,7 @@ export async function calculateHpsaBonus(input, options = {}) {
         eligibleFeatures: [],
         allFeaturesReturned: primaryResult.allFeatures,
       },
+      mua,
       bonus: null,
     };
   }
@@ -114,6 +136,7 @@ export async function calculateHpsaBonus(input, options = {}) {
       eligibleFeatures: primaryResult.eligibleFeatures,
       bothDisciplines,
     },
+    mua,
     bonus,
     disclaimers: {
       fullPartialCounty: FULL_PARTIAL_COUNTY_DISCLAIMER,
