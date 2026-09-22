@@ -2,11 +2,16 @@ import { geocodeAddress } from '../geocoding/index.js';
 import { queryHpsaForSpecialty } from '../hpsa/query.js';
 import { checkMuaStatus } from '../mua/query.js';
 import { calculateBonus } from '../bonus/calculate.js';
+import { checkJ1BaselineEligibility } from '../j1/eligibility.js';
 import {
   FULL_PARTIAL_COUNTY_DISCLAIMER,
   GEOCODE_FAILURE_MESSAGE,
   NOT_IN_HPSA_MESSAGE,
   MUA_NO_BONUS_NOTE,
+  J1_BASELINE_ELIGIBLE_NOTE,
+  J1_BASELINE_NOT_ELIGIBLE_NOTE,
+  J1_HHS_PROGRAM_ELIGIBLE_NOTE,
+  J1_STATE_VARIATION_CAVEAT,
 } from '../consent/disclaimerText.js';
 import { HPSA_LAYER_IDS } from '../config/hrsaConfig.js';
 
@@ -140,6 +145,79 @@ export async function calculateHpsaBonus(input, options = {}) {
     bonus,
     disclaimers: {
       fullPartialCounty: FULL_PARTIAL_COUNTY_DISCLAIMER,
+    },
+  };
+}
+
+/**
+ * @typedef {object} J1CheckerInput
+ * @property {string} address
+ * @property {string} [googleApiKey] - optional, enables the Google fallback geocoder
+ */
+
+/**
+ * Runs the J-1 Visa Waiver baseline eligibility pipeline:
+ *   1. Geocode the address (Census, then Google fallback) — same
+ *      geocoding module as the bonus calculator.
+ *   2. Check the federal baseline: is this location within an active
+ *      geographic HPSA (any discipline) or an active MUA/MUP designation.
+ *   3. Flag whether it separately meets the HHS J-1 program's HPSA
+ *      score >= 7 threshold.
+ *   4. Attach the state PCO directory link and the state-variation
+ *      caveat — this checker does NOT evaluate individual state Conrad 30
+ *      rules (see J1_STATE_VARIATION_CAVEAT for why).
+ *
+ * Framework-agnostic, same as calculateHpsaBonus — plain object in, plain
+ * object out.
+ *
+ * @param {J1CheckerInput} input
+ * @param {object} [options]
+ * @param {(entry: object) => void} [options.onLog]
+ * @returns {Promise<object>} structured result
+ */
+export async function checkJ1Eligibility(input, options = {}) {
+  const { onLog = () => {} } = options;
+  const { address, googleApiKey } = input;
+
+  if (!address || !address.trim()) {
+    throw new Error('address is required.');
+  }
+
+  const geocode = await geocodeAddress(address, { googleApiKey, onLog });
+
+  if (!geocode) {
+    return {
+      status: 'geocode_failed',
+      message: GEOCODE_FAILURE_MESSAGE,
+      geocode: null,
+      j1: null,
+    };
+  }
+
+  const j1Result = await checkJ1BaselineEligibility(geocode.lon, geocode.lat, {
+    geocodedStateAbbr: geocode.stateAbbr,
+  });
+
+  onLog({
+    j1BaselineMet: j1Result.meetsBaseline,
+    j1HhsThresholdMet: j1Result.meetsHhsProgramThreshold,
+    state: j1Result.state?.abbr ?? j1Result.state?.name ?? null,
+  });
+
+  return {
+    status: j1Result.meetsBaseline ? 'eligible' : 'not_eligible',
+    geocode,
+    j1: {
+      meetsBaseline: j1Result.meetsBaseline,
+      baselineNote: j1Result.meetsBaseline ? J1_BASELINE_ELIGIBLE_NOTE : J1_BASELINE_NOT_ELIGIBLE_NOTE,
+      maxHpsaScore: j1Result.maxHpsaScore,
+      meetsHhsProgramThreshold: j1Result.meetsHhsProgramThreshold,
+      hhsProgramNote: j1Result.meetsHhsProgramThreshold ? J1_HHS_PROGRAM_ELIGIBLE_NOTE : null,
+      hpsaByDiscipline: j1Result.hpsaByDiscipline,
+      mua: j1Result.mua,
+      state: j1Result.state,
+      statePcoDirectoryUrl: j1Result.statePcoDirectoryUrl,
+      stateVariationCaveat: J1_STATE_VARIATION_CAVEAT,
     },
   };
 }

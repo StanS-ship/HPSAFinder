@@ -12,7 +12,7 @@ import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { calculateHpsaBonus } from './src/api/handler.js';
+import { calculateHpsaBonus, checkJ1Eligibility } from './src/api/handler.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -73,9 +73,40 @@ async function handleApiCalculate(req, res) {
   }
 }
 
+async function handleApiJ1Check(req, res) {
+  let body = '';
+  for await (const chunk of req) body += chunk;
+
+  let input;
+  try {
+    input = JSON.parse(body || '{}');
+  } catch {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid JSON body.' }));
+    return;
+  }
+
+  try {
+    const result = await checkJ1Eligibility(
+      { ...input, googleApiKey: process.env.GOOGLE_GEOCODING_API_KEY },
+      { onLog: (entry) => console.log('[j1-checker]', JSON.stringify(entry)) }
+    );
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+  } catch (err) {
+    console.error(err);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: err.message }));
+  }
+}
+
 const server = http.createServer((req, res) => {
   if (req.method === 'POST' && req.url === '/api/calculate') {
     handleApiCalculate(req, res);
+    return;
+  }
+  if (req.method === 'POST' && req.url === '/api/j1-check') {
+    handleApiJ1Check(req, res);
     return;
   }
   if (req.method === 'GET') {
