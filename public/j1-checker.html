@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>J-1 Visa Waiver Eligibility Check</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <h1>J-1 Visa Waiver Eligibility Check</h1>
+      <span class="site-header__tag">Federal HPSA/MUA baseline check</span>
+    </div>
+  </header>
+
+  <main>
+    <p><a href="index.html">&larr; Back to home</a></p>
+
+    <div class="card">
+      <h2>Check a practice location</h2>
+      <p>Enter a practice address to check whether it meets the federal shortage-area baseline (HPSA or MUA/MUP) that most state Conrad 30 J-1 visa waiver programs require as a starting point.</p>
+      <p class="field__hint">This checks the federal baseline only. It does not evaluate any individual state's additional Conrad 30 rules, slot availability, or specialty-specific requirements — see the note on the results page.</p>
+
+      <div id="form-error" class="error-box" hidden></div>
+
+      <form id="j1-form" novalidate>
+        <div class="field">
+          <label for="address">Practice address</label>
+          <input type="text" id="address" name="address" placeholder="123 Main St, Smalltown, KS 67001" required autocomplete="street-address" />
+        </div>
+
+        <fieldset>
+          <legend>Contact consent (optional)</legend>
+          <div class="checkbox-row">
+            <input type="checkbox" id="consent-agency" name="consentAgency" />
+            <p>By checking this box, I agree that <strong>[Agency/Hospital Name]</strong> may contact me at the phone number and email I provide with information about physician and advanced-practice job opportunities, including positions that sponsor J-1 visa waivers. Contact may include calls or text messages using an automatic telephone dialing system or prerecorded/artificial voice. I understand that I am <strong>not required to consent</strong> as a condition of using this checker or any services, and I can opt out at any time.</p>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn-primary" id="submit-btn">Check this location</button>
+      </form>
+
+      <div class="disclaimer">
+        This checker is an independent tool and is <strong>not affiliated with or endorsed by HRSA, CMS, or any state health department</strong>. It does not provide immigration advice. Always confirm eligibility with the state Primary Care Office for the state where you intend to practice, and consult an immigration attorney for guidance specific to your situation.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    J-1 Visa Waiver Eligibility Check — a reference tool, not legal or immigration advice.
+  </footer>
+
+  <script src="js/j1-app.js"></script>
+</body>
+</html>
