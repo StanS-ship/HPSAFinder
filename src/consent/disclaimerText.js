@@ -59,3 +59,26 @@ export const NON_AFFILIATION_DISCLAIMER =
 /** 6.2 — Referral-fee disclosure, only render this if referral fees actually apply. */
 export const REFERRAL_FEE_DISCLOSURE =
   'Some links and referrals on this site are to organizations we partner with. We may receive a referral fee or commission if you choose to connect with them or accept a position. Our recommendations are based on our assessment of their services, but you should consider this financial relationship when evaluating them.';
+
+/**
+ * J-1 Visa Waiver checker copy. This tool checks the federal shortage-
+ * area baseline only — it does NOT evaluate any individual state's
+ * Conrad 30 program rules (score cutoffs, Medicaid percentages, specialty
+ * priority, slot availability), which vary by state and change yearly.
+ */
+
+/** Shown when a location meets the HPSA-or-MUA/MUP baseline most state Conrad 30 programs require. */
+export const J1_BASELINE_ELIGIBLE_NOTE =
+  'This location meets the federal HPSA/MUA baseline that most state Conrad 30 J-1 visa waiver programs require as a starting point. It does not mean a waiver will be approved — each state runs its own competitive program with additional rules and a limited number of slots per year.';
+
+/** Shown when a location does not meet the HPSA-or-MUA/MUP baseline. */
+export const J1_BASELINE_NOT_ELIGIBLE_NOTE =
+  'This location does not appear to meet the federal HPSA or MUA/MUP baseline that Conrad 30 J-1 visa waiver programs generally require. Some states allow a limited number of "Flex" waiver slots for sites outside a designated area that serve patients who live in one — check with the state Primary Care Office if that may apply to you.';
+
+/** Shown when the location's HPSA score also meets the separate HHS J-1 program's threshold. */
+export const J1_HHS_PROGRAM_ELIGIBLE_NOTE =
+  "This location's HPSA score also meets the threshold required for the separate, unlimited-slot HHS J-1 Visa Waiver Program (primary care physicians and general psychiatrists only). This can be worth pursuing if your state's Conrad 30 slots are full for the year.";
+
+/** Always shown on J-1 results — the core scope-limiting caveat for this checker. */
+export const J1_STATE_VARIATION_CAVEAT =
+  "Conrad 30 J-1 visa waiver programs are run individually by each state, with their own additional requirements (such as minimum HPSA scores for certain specialties, Medicaid patient-volume percentages, specialty priority, and a fixed 30 waivers per year that can run out before the year ends). This tool cannot check those state-specific rules. Contact the Primary Care Office for the state where you intend to practice to confirm current requirements and slot availability.";
