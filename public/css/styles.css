@@ -248,6 +248,46 @@ dl.attr-list dd { margin: 0; }
   padding: 2rem 1.25rem;
 }
 
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 40rem) {
+  .mode-grid { grid-template-columns: 1fr; }
+}
+
+.mode-card {
+  display: block;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--teal-600);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mode-card:hover { border-color: var(--teal-500); border-top-color: var(--teal-500); }
+
+.mode-card h2 {
+  margin-top: 0;
+  color: var(--navy-900);
+}
+
+.mode-card p {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.mode-card__cta {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: var(--teal-600);
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }

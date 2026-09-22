@@ -21,7 +21,7 @@
       root.innerHTML = `
         <div class="card">
           <div class="notice-box">No results found. Please run the calculator first.</div>
-          <a class="btn-secondary" href="index.html">Go to calculator</a>
+          <a class="btn-secondary" href="calculator.html">Go to calculator</a>
         </div>`;
       return;
     }
@@ -33,7 +33,7 @@
         <div class="card">
           <h2>We couldn't locate that address</h2>
           <div class="error-box">${escapeHtml(result.message)}</div>
-          <a class="btn-secondary" href="index.html">Try again</a>
+          <a class="btn-secondary" href="calculator.html">Try again</a>
         </div>`;
       return;
     }
@@ -44,7 +44,7 @@
           <h2>${escapeHtml(result.message)}</h2>
           <p>The address matched to <strong>${escapeHtml(result.geocode.matchedAddress)}</strong> (geocoded via ${escapeHtml(result.geocode.source)}) does not fall within an active, geographic ${escapeHtml(labelForDiscipline(result.hpsa.discipline))} HPSA.</p>
           <p>No CMS bonus applies for services furnished at this location under the selected specialty.</p>
-          <a class="btn-secondary" href="index.html">Run another estimate</a>
+          <a class="btn-secondary" href="calculator.html">Run another estimate</a>
         </div>
         ${renderMuaCard(result.mua)}
         ${nonAffiliationDisclaimer()}`;

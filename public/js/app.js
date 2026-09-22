@@ -84,7 +84,7 @@
       }
 
       sessionStorage.setItem('hpsa_result', JSON.stringify(result));
-      window.location.href = 'results.html';
+      window.location.href = 'bonus-results.html';
     } catch (err) {
       showError('Could not reach the calculator service. Please check your connection and try again.');
     } finally {

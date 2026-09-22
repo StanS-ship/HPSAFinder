@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HPSA Bonus Estimator</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <h1>HPSA Bonus Estimator</h1>
+      <span class="site-header__tag">Medicare 10% shortage-area bonus, estimated</span>
+    </div>
+  </header>
+
+  <main>
+    <p><a href="index.html">&larr; Back to home</a></p>
+    <div class="card">
+      <h2>Estimate your HPSA bonus</h2>
+      <p>Enter a practice location and your estimated Medicare-paid amount for eligible services. We'll check the address against HRSA's shortage-area designations and estimate the CMS quarterly bonus.</p>
+
+      <div id="form-error" class="error-box" hidden></div>
+
+      <form id="calculator-form" novalidate>
+        <div class="field">
+          <label for="address">Practice address</label>
+          <input type="text" id="address" name="address" placeholder="123 Main St, Smalltown, KS 67001" required autocomplete="street-address" />
+          <p class="field__hint">Eligibility is based on where the service is furnished, not the patient's home address or your primary office.</p>
+        </div>
+
+        <div class="field">
+          <label for="specialty">Specialty</label>
+          <select id="specialty" name="specialty" required>
+            <option value="physician">Physician (non-psychiatry)</option>
+            <option value="psychiatrist">Psychiatrist</option>
+            <option value="dentist">Dentist</option>
+          </select>
+          <p class="field__hint">This determines which HRSA shortage-area layer (primary care, mental health, or dental) we check.</p>
+        </div>
+
+        <div class="field">
+          <label for="annualPaidAmount">Estimated annual Medicare-paid amount ($)</label>
+          <input type="number" id="annualPaidAmount" name="annualPaidAmount" min="0" step="0.01" placeholder="120000" required />
+          <p class="field__hint">The amount Medicare actually pays for your eligible professional services — not the billed or approved amount.</p>
+        </div>
+
+        <div class="field">
+          <label for="paymentFactor">Payment-factor adjustment (optional)</label>
+          <input type="number" id="paymentFactor" name="paymentFactor" min="0.01" step="0.01" placeholder="1.0" />
+          <p class="field__hint">If you only know your allowed charges rather than the amount actually paid, you can enter a ratio to convert (e.g., 0.8). Leave blank to skip — this is your own planning estimate, not a CMS-published figure.</p>
+        </div>
+
+        <fieldset>
+          <legend>Contact consent (optional)</legend>
+          <div class="checkbox-row">
+            <input type="checkbox" id="consent-agency" name="consentAgency" />
+            <p>By checking this box, I agree that <strong>[Agency/Hospital Name]</strong> may contact me at the phone number and email I provide with information about physician and advanced-practice job opportunities. Contact may include calls or text messages using an automatic telephone dialing system or prerecorded/artificial voice. I understand that I am <strong>not required to consent</strong> as a condition of using this calculator or any services, and I can opt out at any time.</p>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn-primary" id="submit-btn">Estimate my bonus</button>
+      </form>
+
+      <div class="disclaimer">
+        This calculator is an independent tool and is <strong>not affiliated with or endorsed by HRSA or CMS</strong>. Bonus eligibility and payment are determined solely by CMS based on official Medicare rules and HRSA's shortage-area designations. Always verify your eligibility and exact bonus amounts using official CMS and HRSA resources before making billing or contractual decisions.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    HPSA Bonus Estimator — a reference tool, not legal, billing, or financial advice.
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
