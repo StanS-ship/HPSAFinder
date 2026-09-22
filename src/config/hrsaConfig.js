@@ -49,6 +49,39 @@ export const GOOGLE_GEOCODER_BASE = 'https://maps.googleapis.com/maps/api/geocod
 export const DEFAULT_CENSUS_BENCHMARK = 'Public_AR_Current';
 
 /**
+ * Medically Underserved Area / Population (MUA/MUP) service. This is a
+ * SEPARATE HRSA feature service from HPSA — different MapServer, different
+ * schema, and importantly, a different consequence: MUA/MUP status does
+ * NOT trigger the CMS 10% Medicare bonus the way an HPSA designation does.
+ * MUA/MUP is instead used for things like FQHC/Section 330 eligibility,
+ * Rural Health Clinic eligibility, and National Health Service Corps
+ * site eligibility. Keep this informational, not part of bonus math.
+ *
+ * Verified live against:
+ *   https://gisportal.hrsa.gov/server/rest/services/Shortage/MedicallyUnderservedAreas_FS/MapServer
+ *   https://gisportal.hrsa.gov/server/rest/services/Shortage/MedicallyUnderservedAreas_FS/MapServer/0
+ */
+export const MUA_MAPSERVER_BASE =
+  'https://gisportal.hrsa.gov/server/rest/services/Shortage/MedicallyUnderservedAreas_FS/MapServer';
+
+/** The one perimeter-polygon layer covering both MUA and MUP designations. */
+export const MUA_LAYER_ID = 0;
+
+/** Verified live fields for the MUA/MUP perimeter-polygon layer (Layer 0). */
+export const MUA_OUT_FIELDS = Object.freeze([
+  'SOURCE_ID',
+  'DESIGNATION_DT',
+  'DESIGNATION_TYPE_DESCRIPTION',
+  'UPDATE_DT',
+  'STATUS_CODE',
+  'STATUS_DESCRIPTION',
+  'SERVICE_AREA_NAME',
+  'SERVICE_AREA_TYPE_DESCRIPTION',
+  'US_MEXICO_BORDER_100KM_INDICATOR',
+  'STATE_FIPS_CODE',
+]);
+
+/**
  * Verified live response fields for the perimeter-polygon layers
  * (Section 2.1.1). Confirmed field-by-field against Layer 10's live
  * schema. Field names are IDENTICAL across layers 2/6/10 (same feature
@@ -80,6 +113,15 @@ export const HPSA_OUT_FIELDS = Object.freeze([
  * published a fixed enum contract for this field.
  */
 export const ELIGIBLE_STATUS_DESC = 'Designated';
+
+/**
+ * MUA/MUP STATUS_DESCRIPTION value treated as currently active. Assumed
+ * to mirror the HPSA layer's "Designated" convention since both come from
+ * the same HRSA Shortage Designation Management System, but this has NOT
+ * been sampled against live MUA data the way HPSA's was — confirm with a
+ * live query before relying on it for eligibility decisions.
+ */
+export const MUA_ELIGIBLE_STATUS_DESC = 'Designated';
 
 /**
  * CMS bonus rules (Section 2.3 / 4.3).
