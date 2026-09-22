@@ -73,7 +73,7 @@
             </div>
           </div>
 
-          <p style="font-size:0.85rem;color:var(--muted)">
+          <p style="font-size:0.85rem;color:var(--ink-soft)">
             Based on ${money(bonus.adjustedPaidAmount)} in estimated annual Medicare-paid amount
             ${bonus.paymentFactorUsed !== 1 ? `(after applying your ${bonus.paymentFactorUsed}× payment-factor adjustment) ` : ''}
             at the CMS HPSA bonus rate of ${(bonus.bonusRate * 100).toFixed(0)}%.

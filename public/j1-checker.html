@@ -3,105 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>J-1 Visa Waiver Eligibility Check — HPSA Finder</title>
-  <meta name="description" content="Check whether a practice location meets the federal HPSA/MUA baseline that most state Conrad 30 J-1 visa waiver programs require." />
+  <title>J-1 Visa Waiver Eligibility Check</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="site-header__brand" href="index.html">
-        <div class="site-header__logo">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
-        </div>
-        <div class="site-header__title">
-          <span>HPSA Finder</span>
-          <span>Shortage-Area Tools</span>
-        </div>
-      </a>
-      <nav class="site-header__nav">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="calculator.html">Bonus Calculator</a>
-        <a class="nav-link nav-link-active" href="j1-checker.html">J-1 Checker</a>
-      </nav>
+      <h1>J-1 Visa Waiver Eligibility Check</h1>
+      <span class="site-header__tag">Federal HPSA/MUA baseline check</span>
     </div>
   </header>
 
   <main>
-    <div class="page-content">
-      <a href="index.html" class="back-link">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-        Back to home
-      </a>
+    <p><a href="index.html">&larr; Back to home</a></p>
 
-      <h1 class="page-content__title">J-1 Visa Waiver Eligibility Check</h1>
-      <p class="page-content__subtitle">Check whether a practice location meets the federal HPSA/MUA baseline that most state Conrad 30 J-1 visa waiver programs require.</p>
+    <div class="card">
+      <h2>Check a practice location</h2>
+      <p>Enter a practice address to check whether it meets the federal shortage-area baseline (HPSA or MUA/MUP) that most state Conrad 30 J-1 visa waiver programs require as a starting point.</p>
+      <p class="field__hint">This checks the federal baseline only. It does not evaluate any individual state's additional Conrad 30 rules, slot availability, or specialty-specific requirements — see the note on the results page.</p>
 
-      <div class="card">
-        <h2>Check a practice location</h2>
-        <p>Enter a practice address to check whether it meets the federal shortage-area baseline (HPSA or MUA/MUP) that most state Conrad 30 J-1 visa waiver programs require as a starting point.</p>
-        <p class="field__hint">This checks the federal baseline only. It does not evaluate any individual state's additional Conrad 30 rules, slot availability, or specialty-specific requirements — see the note on the results page.</p>
+      <div id="form-error" class="error-box" hidden></div>
 
-        <div id="form-error" class="error-box" hidden></div>
-
-        <form id="j1-form" novalidate>
-          <div class="field">
-            <label for="address">Practice address</label>
-            <input type="text" id="address" name="address" placeholder="123 Main St, Smalltown, KS 67001" required autocomplete="street-address" />
-          </div>
-
-          <fieldset>
-            <legend>Contact consent (optional)</legend>
-            <div class="checkbox-row">
-              <input type="checkbox" id="consent-agency" name="consentAgency" />
-              <p>By checking this box, I agree that <strong>[Agency/Hospital Name]</strong> may contact me at the phone number and email I provide with information about physician and advanced-practice job opportunities, including positions that sponsor J-1 visa waivers. Contact may include calls or text messages using an automatic telephone dialing system or prerecorded/artificial voice. I understand that I am <strong>not required to consent</strong> as a condition of using this checker or any services, and I can opt out at any time.</p>
-            </div>
-          </fieldset>
-
-          <button type="submit" class="btn-primary" id="submit-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-            Check this location
-          </button>
-        </form>
-
-        <div class="disclaimer">
-          This checker is an independent tool and is <strong>not affiliated with or endorsed by HRSA, CMS, or any state health department</strong>. It does not provide immigration advice. Always confirm eligibility with the state Primary Care Office for the state where you intend to practice, and consult an immigration attorney for guidance specific to your situation.
+      <form id="j1-form" novalidate>
+        <div class="field">
+          <label for="address">Practice address</label>
+          <input type="text" id="address" name="address" placeholder="123 Main St, Smalltown, KS 67001" required autocomplete="street-address" />
         </div>
+
+        <fieldset>
+          <legend>Contact consent (optional)</legend>
+          <div class="checkbox-row">
+            <input type="checkbox" id="consent-agency" name="consentAgency" />
+            <p>By checking this box, I agree that <strong>[Agency/Hospital Name]</strong> may contact me at the phone number and email I provide with information about physician and advanced-practice job opportunities, including positions that sponsor J-1 visa waivers. Contact may include calls or text messages using an automatic telephone dialing system or prerecorded/artificial voice. I understand that I am <strong>not required to consent</strong> as a condition of using this checker or any services, and I can opt out at any time.</p>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn-primary" id="submit-btn">Check this location</button>
+      </form>
+
+      <div class="disclaimer">
+        This checker is an independent tool and is <strong>not affiliated with or endorsed by HRSA, CMS, or any state health department</strong>. It does not provide immigration advice. Always confirm eligibility with the state Primary Care Office for the state where you intend to practice, and consult an immigration attorney for guidance specific to your situation.
       </div>
     </div>
   </main>
 
   <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div>
-        <div class="site-footer__brand">
-          <div class="site-footer__logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
-          </div>
-          <span class="site-footer__brand-name">HPSA Finder</span>
-        </div>
-        <p class="site-footer__desc">A free tool for medical providers to check Health Professional Shortage Area designations and estimate Medicare bonus eligibility.</p>
-      </div>
-      <div>
-        <h3 class="site-footer__heading">Tools</h3>
-        <ul class="site-footer__links">
-          <li><a href="calculator.html">Bonus Calculator</a></li>
-          <li><a href="j1-checker.html">J-1 Visa Waiver Checker</a></li>
-          <li><a href="index.html">Home</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="site-footer__heading">Resources</h3>
-        <ul class="site-footer__links">
-          <li><a href="https://data.hrsa.gov/topics/health-workforce/shortage-areas/hpsa-find" target="_blank" rel="noopener noreferrer">HRSA HPSA Find Tool</a></li>
-          <li><a href="https://data.hrsa.gov/tools/shortage-area/mua-find" target="_blank" rel="noopener noreferrer">HRSA MUA/MUP Find Tool</a></li>
-          <li><a href="https://www.cms.gov/" target="_blank" rel="noopener noreferrer">CMS Official Site</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="site-footer__bottom">
-      HPSA Finder is an independent tool and is not affiliated with or endorsed by HRSA, CMS, or any government agency. Always verify designation status through the official HRSA HPSA Query Tool before making billing or practice decisions.
-    </div>
+    J-1 Visa Waiver Eligibility Check — a reference tool, not legal or immigration advice.
   </footer>
 
   <script src="js/j1-app.js"></script>
