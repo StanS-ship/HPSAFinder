@@ -22,12 +22,20 @@ resources.
    - Layer `10` — Primary Care HPSA
    - Layer `6` — Mental Health HPSA (psychiatrists)
    - Layer `2` — Dental Health HPSA
-3. **Bonus calculation** (`src/bonus/`) — applies the CMS 10% bonus rate
+3. **MUA/MUP lookup** (`src/mua/`) — separately queries HRSA's
+   `MedicallyUnderservedAreas_FS` MapServer (Layer `0`) for the same
+   coordinates. **This is informational only.** Unlike an HPSA
+   designation, MUA/MUP status does not trigger the CMS 10% bonus — it
+   matters for other things (FQHC/Section 330 eligibility, Rural Health
+   Clinic eligibility, National Health Service Corps site eligibility).
+   It runs on every search regardless of specialty and never feeds into
+   the bonus math.
+4. **Bonus calculation** (`src/bonus/`) — applies the CMS 10% bonus rate
    to the estimated annual Medicare-paid amount, split into an annual and
    quarterly figure. The "payment factor" (allowed-charge-to-paid-amount
    ratio) is a **user-configurable estimate**, never a hardcoded CMS
    constant — see the note in `src/config/hrsaConfig.js`.
-4. **Disclaimers & consent copy** (`src/consent/`) — verbatim TCPA/FTC
+5. **Disclaimers & consent copy** (`src/consent/`) — verbatim TCPA/FTC
    consent language and the HRSA/CMS non-affiliation disclaimer, kept in
    one file so legal copy only needs to be edited in one place.
 
@@ -47,7 +55,8 @@ can be wired into Bolt.new (or anything else) with a thin adapter.
 │   │   ├── census.js              # primary geocoder
 │   │   ├── google.js              # fallback geocoder
 │   │   └── index.js               # Census-first, Google-fallback orchestration
-│   ├── hpsa/query.js               # MapServer point-in-polygon query + eligibility filters
+│   ├── hpsa/query.js               # HPSA MapServer point-in-polygon query + eligibility filters
+│   ├── mua/query.js                # MUA/MUP MapServer lookup (informational, no bonus)
 │   ├── bonus/calculate.js          # CMS 10% bonus math
 │   ├── consent/disclaimerText.js   # verbatim consent + disclaimer copy (Section 6)
 │   └── api/handler.js              # portable controller tying the above together
@@ -115,6 +124,12 @@ To bring it into a Bolt.new project:
   not published these as a fixed enum contract. `isGeographicHpsa()` and
   `isCurrentlyDesignated()` in `src/hpsa/query.js` are the two places to
   update if HRSA changes these values.
+- **The MUA/MUP `STATUS_DESCRIPTION` eligible value ("Designated") is an
+  assumption**, not a confirmed live sample — it mirrors the HPSA
+  convention since both come from HRSA's shared Shortage Designation
+  Management System, but should be verified against a real MUA/MUP query
+  response before relying on it. See the note in
+  `isCurrentlyDesignatedMua()` in `src/mua/query.js`.
 - **The "payment factor" is a planning estimate**, not an official CMS
   multiplier — it is intentionally exposed as a configurable input, never
   hardcoded as if it were authoritative.
