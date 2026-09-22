@@ -3,73 +3,127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HPSA Bonus Estimator</title>
+  <title>HPSA Bonus Calculator — HPSA Finder</title>
+  <meta name="description" content="Enter your practice address to check it against live HRSA shortage-area data and estimate your CMS 10% Medicare bonus." />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="site-header__inner">
-      <h1>HPSA Bonus Estimator</h1>
-      <span class="site-header__tag">Medicare 10% shortage-area bonus, estimated</span>
+      <a class="site-header__brand" href="index.html">
+        <div class="site-header__logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+        </div>
+        <div class="site-header__title">
+          <span>HPSA Finder</span>
+          <span>Shortage-Area Tools</span>
+        </div>
+      </a>
+      <nav class="site-header__nav">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link nav-link-active" href="calculator.html">Bonus Calculator</a>
+        <a class="nav-link" href="j1-checker.html">J-1 Checker</a>
+      </nav>
     </div>
   </header>
 
   <main>
-    <p><a href="index.html">&larr; Back to home</a></p>
-    <div class="card">
-      <h2>Estimate your HPSA bonus</h2>
-      <p>Enter a practice location and your estimated Medicare-paid amount for eligible services. We'll check the address against HRSA's shortage-area designations and estimate the CMS quarterly bonus.</p>
+    <div class="page-content">
+      <a href="index.html" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Back to home
+      </a>
 
-      <div id="form-error" class="error-box" hidden></div>
+      <h1 class="page-content__title">HPSA Bonus Calculator</h1>
+      <p class="page-content__subtitle">Enter your practice address to check it against live HRSA shortage-area data and estimate your CMS 10% Medicare bonus.</p>
 
-      <form id="calculator-form" novalidate>
-        <div class="field">
-          <label for="address">Practice address</label>
-          <input type="text" id="address" name="address" placeholder="123 Main St, Smalltown, KS 67001" required autocomplete="street-address" />
-          <p class="field__hint">Eligibility is based on where the service is furnished, not the patient's home address or your primary office.</p>
-        </div>
+      <div class="card">
+        <h2>Estimate your HPSA bonus</h2>
+        <p>Enter a practice location and your estimated Medicare-paid amount for eligible services. We'll check the address against HRSA's shortage-area designations and estimate the CMS quarterly bonus.</p>
 
-        <div class="field">
-          <label for="specialty">Specialty</label>
-          <select id="specialty" name="specialty" required>
-            <option value="physician">Physician (non-psychiatry)</option>
-            <option value="psychiatrist">Psychiatrist</option>
-            <option value="dentist">Dentist</option>
-          </select>
-          <p class="field__hint">This determines which HRSA shortage-area layer (primary care, mental health, or dental) we check.</p>
-        </div>
+        <div id="form-error" class="error-box" hidden></div>
 
-        <div class="field">
-          <label for="annualPaidAmount">Estimated annual Medicare-paid amount ($)</label>
-          <input type="number" id="annualPaidAmount" name="annualPaidAmount" min="0" step="0.01" placeholder="120000" required />
-          <p class="field__hint">The amount Medicare actually pays for your eligible professional services — not the billed or approved amount.</p>
-        </div>
-
-        <div class="field">
-          <label for="paymentFactor">Payment-factor adjustment (optional)</label>
-          <input type="number" id="paymentFactor" name="paymentFactor" min="0.01" step="0.01" placeholder="1.0" />
-          <p class="field__hint">If you only know your allowed charges rather than the amount actually paid, you can enter a ratio to convert (e.g., 0.8). Leave blank to skip — this is your own planning estimate, not a CMS-published figure.</p>
-        </div>
-
-        <fieldset>
-          <legend>Contact consent (optional)</legend>
-          <div class="checkbox-row">
-            <input type="checkbox" id="consent-agency" name="consentAgency" />
-            <p>By checking this box, I agree that <strong>[Agency/Hospital Name]</strong> may contact me at the phone number and email I provide with information about physician and advanced-practice job opportunities. Contact may include calls or text messages using an automatic telephone dialing system or prerecorded/artificial voice. I understand that I am <strong>not required to consent</strong> as a condition of using this calculator or any services, and I can opt out at any time.</p>
+        <form id="calculator-form" novalidate>
+          <div class="field">
+            <label for="address">Practice address</label>
+            <input type="text" id="address" name="address" placeholder="123 Main St, Smalltown, KS 67001" required autocomplete="street-address" />
+            <p class="field__hint">Eligibility is based on where the service is furnished, not the patient's home address or your primary office.</p>
           </div>
-        </fieldset>
 
-        <button type="submit" class="btn-primary" id="submit-btn">Estimate my bonus</button>
-      </form>
+          <div class="field">
+            <label for="specialty">Specialty</label>
+            <select id="specialty" name="specialty" required>
+              <option value="physician">Physician (non-psychiatry)</option>
+              <option value="psychiatrist">Psychiatrist</option>
+              <option value="dentist">Dentist</option>
+            </select>
+            <p class="field__hint">This determines which HRSA shortage-area layer (primary care, mental health, or dental) we check.</p>
+          </div>
 
-      <div class="disclaimer">
-        This calculator is an independent tool and is <strong>not affiliated with or endorsed by HRSA or CMS</strong>. Bonus eligibility and payment are determined solely by CMS based on official Medicare rules and HRSA's shortage-area designations. Always verify your eligibility and exact bonus amounts using official CMS and HRSA resources before making billing or contractual decisions.
+          <div class="field">
+            <label for="annualPaidAmount">Estimated annual Medicare-paid amount ($)</label>
+            <input type="number" id="annualPaidAmount" name="annualPaidAmount" min="0" step="0.01" placeholder="120000" required />
+            <p class="field__hint">The amount Medicare actually pays for your eligible professional services — not the billed or approved amount.</p>
+          </div>
+
+          <div class="field">
+            <label for="paymentFactor">Payment-factor adjustment (optional)</label>
+            <input type="number" id="paymentFactor" name="paymentFactor" min="0.01" step="0.01" placeholder="1.0" />
+            <p class="field__hint">If you only know your allowed charges rather than the amount actually paid, you can enter a ratio to convert (e.g., 0.8). Leave blank to skip — this is your own planning estimate, not a CMS-published figure.</p>
+          </div>
+
+          <fieldset>
+            <legend>Contact consent (optional)</legend>
+            <div class="checkbox-row">
+              <input type="checkbox" id="consent-agency" name="consentAgency" />
+              <p>By checking this box, I agree that <strong>[Agency/Hospital Name]</strong> may contact me at the phone number and email I provide with information about physician and advanced-practice job opportunities. Contact may include calls or text messages using an automatic telephone dialing system or prerecorded/artificial voice. I understand that I am <strong>not required to consent</strong> as a condition of using this calculator or any services, and I can opt out at any time.</p>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="btn-primary" id="submit-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+            Estimate my bonus
+          </button>
+        </form>
+
+        <div class="disclaimer">
+          This calculator is an independent tool and is <strong>not affiliated with or endorsed by HRSA or CMS</strong>. Bonus eligibility and payment are determined solely by CMS based on official Medicare rules and HRSA's shortage-area designations. Always verify your eligibility and exact bonus amounts using official CMS and HRSA resources before making billing or contractual decisions.
+        </div>
       </div>
     </div>
   </main>
 
   <footer class="site-footer">
-    HPSA Bonus Estimator — a reference tool, not legal, billing, or financial advice.
+    <div class="site-footer__inner">
+      <div>
+        <div class="site-footer__brand">
+          <div class="site-footer__logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+          </div>
+          <span class="site-footer__brand-name">HPSA Finder</span>
+        </div>
+        <p class="site-footer__desc">A free tool for medical providers to check Health Professional Shortage Area designations and estimate Medicare bonus eligibility.</p>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Tools</h3>
+        <ul class="site-footer__links">
+          <li><a href="calculator.html">Bonus Calculator</a></li>
+          <li><a href="j1-checker.html">J-1 Visa Waiver Checker</a></li>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Resources</h3>
+        <ul class="site-footer__links">
+          <li><a href="https://data.hrsa.gov/topics/health-workforce/shortage-areas/hpsa-find" target="_blank" rel="noopener noreferrer">HRSA HPSA Find Tool</a></li>
+          <li><a href="https://data.hrsa.gov/tools/shortage-area/mua-find" target="_blank" rel="noopener noreferrer">HRSA MUA/MUP Find Tool</a></li>
+          <li><a href="https://www.cms.gov/" target="_blank" rel="noopener noreferrer">CMS Official Site</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      HPSA Finder is an independent tool and is not affiliated with or endorsed by HRSA, CMS, or any government agency. Always verify designation status through the official HRSA HPSA Query Tool before making billing or practice decisions.
+    </div>
   </footer>
 
   <script src="js/app.js"></script>

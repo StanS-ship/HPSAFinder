@@ -3,41 +3,178 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HRSA Shortage-Area Tools</title>
+  <title>HPSA Finder — Medicare 10% Bonus Calculator</title>
+  <meta name="description" content="Check your practice address against live HRSA shortage-area data and estimate your CMS 10% Medicare bonus." />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="site-header__inner">
-      <h1>HRSA Shortage-Area Tools</h1>
-      <span class="site-header__tag">Independent reference tools, not affiliated with HRSA or CMS</span>
+      <a class="site-header__brand" href="index.html">
+        <div class="site-header__logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+        </div>
+        <div class="site-header__title">
+          <span>HPSA Finder</span>
+          <span>Shortage-Area Tools</span>
+        </div>
+      </a>
+      <nav class="site-header__nav">
+        <a class="nav-link nav-link-active" href="index.html">Home</a>
+        <a class="nav-link" href="calculator.html">Bonus Calculator</a>
+        <a class="nav-link" href="j1-checker.html">J-1 Checker</a>
+      </nav>
     </div>
   </header>
 
   <main>
-    <p style="color:var(--ink-soft);margin-bottom:1.5rem;">What are you looking for?</p>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero__inner">
+        <div class="hero__badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          Free Medicare Shortage-Area Tools
+        </div>
+        <h1>Find Out If You Qualify for the <span class="accent">10% Medicare Bonus</span></h1>
+        <p class="hero__sub">Medical providers serving Health Professional Shortage Areas (HPSAs) may be eligible for a 10% bonus on Medicare physician fee schedule payments. Use our tools to check your area's designation status and estimate your bonus.</p>
+        <div class="hero__actions">
+          <a href="calculator.html" class="cta-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+            Check My Area Now
+          </a>
+          <a href="j1-checker.html" class="btn-outline">J-1 Visa Waiver Check</a>
+        </div>
+      </div>
+    </section>
 
-    <div class="mode-grid">
-      <a class="mode-card" href="calculator.html">
-        <h2>Medicare HPSA Bonus</h2>
-        <p>Estimate the CMS 10% Medicare bonus for practicing in a designated Health Professional Shortage Area.</p>
-        <span class="mode-card__cta">Estimate my bonus &rarr;</span>
+    <!-- Stats bar -->
+    <section class="stats-bar">
+      <div class="stats-bar__inner">
+        <div class="stat-item">
+          <div class="stat-item__value">10%</div>
+          <div class="stat-item__label">Medicare Bonus Rate</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__value">3 Types</div>
+          <div class="stat-item__label">HPSA Designations</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__value">0–26</div>
+          <div class="stat-item__label">HPSA Score Range</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__value">Free</div>
+          <div class="stat-item__label">No Sign-Up Needed</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section class="section section--white">
+      <div class="container-page">
+        <div class="section__inner" style="text-align:center; margin-bottom:2.5rem;">
+          <p class="section__eyebrow">Choose a Tool</p>
+          <h2>What are you looking for?</h2>
+        </div>
+        <div class="mode-grid" style="max-width:48rem; margin:0 auto;">
+          <a class="mode-card" href="calculator.html">
+            <h2>Medicare HPSA Bonus</h2>
+            <p>Estimate the CMS 10% Medicare bonus for practicing in a designated Health Professional Shortage Area.</p>
+            <span class="mode-card__cta">Estimate my bonus &rarr;</span>
+          </a>
+          <a class="mode-card" href="j1-checker.html">
+            <h2>J-1 Visa Waiver Eligibility</h2>
+            <p>Check whether a practice location meets the federal HPSA/MUA baseline most state Conrad 30 J-1 visa waiver programs require.</p>
+            <span class="mode-card__cta">Check eligibility &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section section--cream">
+      <div class="container-page">
+        <div class="section__inner" style="text-align:center; margin-bottom:2.5rem;">
+          <p class="section__eyebrow">Why Use HPSA Finder</p>
+          <h2>Quick, Clear, and Actionable</h2>
+          <p>Quickly determine whether your service area qualifies for enhanced Medicare reimbursement and understand the factors behind each designation.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h3>Instant Designation Check</h3>
+            <p>Enter your practice address to immediately see whether your location holds an active HPSA designation for primary care, mental health, or dental health.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3>Bonus Payment Estimates</h3>
+            <p>Enter your annual Medicare charges to get a clear estimate of the additional 10% bonus payment you could receive for services in designated shortage areas.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+            </div>
+            <h3>Clear and Actionable Data</h3>
+            <p>Each result includes the designation type and date, the HPSA score, and the rural/urban status — everything you need to verify your eligibility.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section class="cta-section">
+      <h2>Ready to Check Your Area?</h2>
+      <p>Jump straight to the calculator and find out in seconds whether your practice address qualifies for the 10% Medicare bonus.</p>
+      <a href="calculator.html" class="cta-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+        Run the Calculator
       </a>
+    </section>
 
-      <a class="mode-card" href="j1-checker.html">
-        <h2>J-1 Visa Waiver Eligibility</h2>
-        <p>Check whether a practice location meets the federal HPSA/MUA baseline most state Conrad 30 J-1 visa waiver programs require.</p>
-        <span class="mode-card__cta">Check eligibility &rarr;</span>
-      </a>
-    </div>
-
-    <div class="disclaimer" style="margin-top:2rem;">
-      These are independent reference tools and are not affiliated with or endorsed by HRSA or CMS. Always verify results using official CMS, HRSA, and (for J-1 waivers) your state's Primary Care Office resources before making billing, contractual, or immigration-related decisions.
-    </div>
+    <!-- Disclaimer -->
+    <section class="disclaimer-section">
+      <div class="disclaimer-section__inner">
+        <h2>Disclaimer</h2>
+        <p>These are independent reference tools and are not affiliated with or endorsed by HRSA or CMS. Bonus eligibility and payment are determined solely by CMS based on official Medicare rules and HRSA's shortage-area designations. Always verify your eligibility and exact bonus amounts using official CMS and HRSA resources before making billing or contractual decisions. For J-1 waivers, always confirm eligibility with your state's Primary Care Office.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
-    HRSA Shortage-Area Tools — reference tools, not legal, billing, financial, or immigration advice.
+    <div class="site-footer__inner">
+      <div>
+        <div class="site-footer__brand">
+          <div class="site-footer__logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+          </div>
+          <span class="site-footer__brand-name">HPSA Finder</span>
+        </div>
+        <p class="site-footer__desc">A free tool for medical providers to check Health Professional Shortage Area designations and estimate Medicare bonus eligibility.</p>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Tools</h3>
+        <ul class="site-footer__links">
+          <li><a href="calculator.html">Bonus Calculator</a></li>
+          <li><a href="j1-checker.html">J-1 Visa Waiver Checker</a></li>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Resources</h3>
+        <ul class="site-footer__links">
+          <li><a href="https://data.hrsa.gov/topics/health-workforce/shortage-areas/hpsa-find" target="_blank" rel="noopener noreferrer">HRSA HPSA Find Tool</a></li>
+          <li><a href="https://data.hrsa.gov/tools/shortage-area/mua-find" target="_blank" rel="noopener noreferrer">HRSA MUA/MUP Find Tool</a></li>
+          <li><a href="https://www.cms.gov/" target="_blank" rel="noopener noreferrer">CMS Official Site</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      HPSA Finder is an independent tool and is not affiliated with or endorsed by HRSA, CMS, or any government agency. HPSA designation data shown here is for informational purposes only and may not reflect the most current official designations. Always verify designation status through the official HRSA HPSA Query Tool before making billing or practice decisions.
+    </div>
   </footer>
 </body>
 </html>
