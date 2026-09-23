@@ -164,6 +164,32 @@ main {
   .hero { padding: 6rem 1.25rem; }
 }
 
+.hero--compact {
+  padding: 2rem 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .hero--compact { padding: 2.5rem 1.25rem; }
+}
+
+.hero--compact .hero__badge {
+  margin-bottom: 0.75rem;
+}
+
+.hero--compact h1 {
+  font-size: 1.5rem;
+  margin: 0 0 0.75rem;
+}
+
+@media (min-width: 48rem) {
+  .hero--compact h1 { font-size: 2.25rem; }
+}
+
+.hero--compact .hero__sub {
+  font-size: 1rem;
+  margin: 0 auto;
+}
+
 .hero__inner {
   max-width: 48rem;
   margin: 0 auto;
