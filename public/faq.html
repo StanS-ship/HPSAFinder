@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ — HPSA Finder</title>
+  <meta name="description" content="Frequently asked questions about the CMS HPSA 10% Medicare bonus, eligibility rules, payment factors, dual-discipline areas, and how HPSA Finder works." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="index.html">
+        <div class="site-header__logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+        </div>
+        <div class="site-header__title">
+          <span>HPSA Finder</span>
+          <span>Shortage-Area Tools</span>
+        </div>
+      </a>
+      <nav class="site-header__nav">
+        <a class="nav-link" href="j1-checker.html">J-1 Waiver Check</a>
+        <a class="nav-link" href="calculator.html">Medicare Bonus Calculator</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-content">
+      <a href="index.html" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Back to home
+      </a>
+
+      <h1 class="page-content__title">Frequently Asked Questions</h1>
+      <p class="page-content__subtitle">Common questions about the HPSA bonus, eligibility, and how this calculator works.</p>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What is the HPSA bonus?</summary>
+          <div class="faq-item__body">
+            <p>The HPSA bonus is a 10% incentive payment added to Medicare's physician fee schedule payment for eligible professional services furnished in a designated geographic Health Professional Shortage Area. It is intended to encourage physicians to practice in underserved communities.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What services are eligible for the 10% HPSA Medicare bonus?</summary>
+          <div class="faq-item__body">
+            <p>Covered professional services billed under the Medicare Physician Fee Schedule are generally eligible. The Professional Component/Technical Component (PC/TC) indicator on the fee schedule identifies which service codes qualify. Services must be furnished to Medicare beneficiaries in a designated geographic HPSA.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How is eligibility determined?</summary>
+          <div class="faq-item__body">
+            <p>Eligibility depends on whether the location where you furnish services is designated as a geographic HPSA as of December 31 of the prior year. Only services in areas that held that designation on that date are eligible for the bonus in the current year. CMS also publishes an automated ZIP-code file for providers who do not need to add a modifier to claims.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What is the &lsquo;payment factor&rsquo;?</summary>
+          <div class="faq-item__body">
+            <p>The payment factor is the 10% bonus rate applied to what Medicare actually pays for an eligible service. Our calculator multiplies your estimated annual Medicare-paid amount by 10% to estimate the additional bonus you could receive.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What if my area is both a primary-care and mental-health HPSA?</summary>
+          <div class="faq-item__body">
+            <p>An area can carry more than one HPSA designation at the same time. Physicians qualify for the bonus based on the primary-care HPSA, and psychiatrists (specialty 26) qualify based on the mental-health HPSA. Each discipline is evaluated against its own shortage-area layer.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Why can&rsquo;t you tell me if I&rsquo;m in a full- or partial-county HPSA?</summary>
+          <div class="faq-item__body">
+            <p>Some ZIP codes split across full- and partial-county HPSA boundaries. In those cases, the exact boundary determines whether a modifier is required on claims. Our tool identifies whether your location falls within a designated HPSA, but you should verify your exact billing requirements with your MAC or CMS's published bonus ZIP-code list.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Is this tool affiliated with HRSA or CMS?</summary>
+          <div class="faq-item__body">
+            <p>No. HPSA Finder is an independent tool and is not affiliated with, endorsed by, or operated on behalf of HRSA, CMS, or any government agency. Always verify designation status and bonus eligibility through official HRSA and CMS resources before making billing or practice decisions.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Does the bonus apply to dental or mental health services?</summary>
+          <div class="faq-item__body">
+            <p>The 10% Medicare HPSA bonus applies to physicians furnishing covered professional services in a geographic primary-care HPSA, and to psychiatrists (specialty 26) furnishing services in a geographic mental-health HPSA. Dental HPSA designations support other workforce programs but do not trigger the Medicare bonus payment.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How often is the HRSA data updated?</summary>
+          <div class="faq-item__body">
+            <p>HRSA updates its shortage-area designations periodically, and the data our tool queries comes from HRSA's live GIS MapServer. Designations can change, so always confirm the current status through the official HRSA HPSA Find Tool before relying on a result for billing decisions.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What does the HPSA score (0&ndash;26) mean?</summary>
+          <div class="faq-item__body">
+            <p>The HPSA score is a federally mandated rating that reflects the severity of the provider shortage in an area. Primary-care and mental-health HPSAs are scored 1&ndash;25, and dental HPSAs are scored 1&ndash;26. A higher score indicates greater need. The score can change over time as population and workforce data are updated.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>Still have questions?</h2>
+        <p>If you didn't find what you were looking for, send us a message and we'll get back to you.</p>
+        <a href="contact.html" class="btn-secondary">Contact us</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>
+        <div class="site-footer__brand">
+          <div class="site-footer__logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+          </div>
+          <span class="site-footer__brand-name">HPSA Finder</span>
+        </div>
+        <p class="site-footer__desc">A free tool for medical providers to check Health Professional Shortage Area designations and estimate Medicare bonus eligibility.</p>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Tools</h3>
+        <ul class="site-footer__links">
+          <li><a href="j1-checker.html">J-1 Visa Waiver Checker</a></li>
+          <li><a href="calculator.html">Bonus Calculator</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="site-footer__heading">Resources</h3>
+        <ul class="site-footer__links">
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="https://data.hrsa.gov/topics/health-workforce/shortage-areas/hpsa-find" target="_blank" rel="noopener noreferrer">HRSA HPSA Find Tool</a></li>
+          <li><a href="https://data.hrsa.gov/tools/shortage-area/mua-find" target="_blank" rel="noopener noreferrer">HRSA MUA/MUP Find Tool</a></li>
+          <li><a href="https://www.cms.gov/" target="_blank" rel="noopener noreferrer">CMS Official Site</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="contact.html">Contact &amp; Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      HPSA Finder is an independent tool and is not affiliated with or endorsed by HRSA, CMS, or any government agency. Always verify designation status through the official HRSA HPSA Query Tool before making billing or practice decisions.
+    </div>
+  </footer>
+</body>
+</html>
