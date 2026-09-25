@@ -665,6 +665,48 @@ legend {
 .disclaimer + .disclaimer { margin-top: 0.75rem; padding-top: 0.75rem; border-top: none; }
 
 /* ---- FAQ list ---- */
+.faq-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+
+.faq-column {
+  min-width: 0;
+}
+
+.faq-column__heading {
+  min-height: 9.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.faq-column__heading h2 {
+  font-size: 1.5rem;
+  color: var(--navy);
+  margin: 0 0 0.625rem;
+}
+
+.faq-column__heading p:last-child {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.625;
+  margin: 0;
+}
+
+@media (max-width: 48rem) {
+  .faq-columns {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .faq-column__heading {
+    min-height: 0;
+    margin-bottom: 1rem;
+  }
+}
+
 .faq-list {
   margin-bottom: 2rem;
 }
