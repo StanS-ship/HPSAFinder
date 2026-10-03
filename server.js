@@ -25,7 +25,8 @@ const MIME_TYPES = {
 };
 
 async function serveStatic(reqPath, res) {
-  const relative = reqPath === '/' ? '/index.html' : reqPath;
+  const pathname = new URL(reqPath, 'http://localhost').pathname;
+  const relative = pathname === '/' ? '/index.html' : pathname;
   const filePath = path.join(PUBLIC_DIR, relative);
 
   // Prevent path traversal outside of public/
@@ -101,11 +102,12 @@ async function handleApiJ1Check(req, res) {
 }
 
 const server = http.createServer((req, res) => {
-  if (req.method === 'POST' && req.url === '/api/calculate') {
+  const pathname = new URL(req.url, 'http://localhost').pathname;
+  if (req.method === 'POST' && pathname === '/api/calculate') {
     handleApiCalculate(req, res);
     return;
   }
-  if (req.method === 'POST' && req.url === '/api/j1-check') {
+  if (req.method === 'POST' && pathname === '/api/j1-check') {
     handleApiJ1Check(req, res);
     return;
   }

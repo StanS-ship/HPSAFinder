@@ -62,7 +62,7 @@
     if (consentAgency) {
       const consentRecord = {
         agency: '[Agency/Hospital Name]',
-        consentText: document.querySelector('.checkbox-row p').textContent.trim(),
+        consentText: form.querySelector('.checkbox-row p')?.textContent.trim() || '',
         timestamp: new Date().toISOString(),
         checked: true,
       };

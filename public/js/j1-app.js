@@ -37,13 +37,14 @@
     if (consentAgency) {
       const consentRecord = {
         agency: '[Agency/Hospital Name]',
-        consentText: document.querySelector('.checkbox-row p').textContent.trim(),
+        consentText: form.querySelector('.checkbox-row p')?.textContent.trim() || '',
         timestamp: new Date().toISOString(),
         checked: true,
       };
       sessionStorage.setItem('j1_consent_record', JSON.stringify(consentRecord));
     }
 
+    let navigating = false;
     try {
       const res = await fetch('/api/j1-check', {
         method: 'POST',
@@ -59,12 +60,15 @@
       }
 
       sessionStorage.setItem('j1_result', JSON.stringify(result));
+      navigating = true;
       window.location.href = 'j1-results.html';
     } catch (err) {
       showError('Could not reach the checker service. Please check your connection and try again.');
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Check this location';
+      if (!navigating) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Check this location';
+      }
     }
   });
 })();

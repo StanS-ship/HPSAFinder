@@ -38,7 +38,7 @@ export async function queryMuaLayer(lon, lat) {
   url.searchParams.set('outFields', MUA_OUT_FIELDS.join(','));
   url.searchParams.set('returnGeometry', 'false');
 
-  const res = await fetch(url.toString());
+  const res = await fetch(url.toString(), { signal: AbortSignal.timeout(10000) });
   if (!res.ok) {
     throw new Error(`HRSA MUA MapServer query returned HTTP ${res.status}`);
   }

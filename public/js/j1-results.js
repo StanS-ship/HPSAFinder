@@ -26,15 +26,31 @@
       return;
     }
 
-    const result = JSON.parse(raw);
-
-    if (result.status === 'geocode_failed') {
+    let result;
+    try {
+      result = JSON.parse(raw);
+    } catch {
       root.innerHTML = `
         <div class="card">
-          <h2>We couldn't locate that address</h2>
-          <div class="error-box">${escapeHtml(result.message)}</div>
+          <div class="error-box">These results could not be opened. Please run the checker again.</div>
+          <a class="btn-secondary" href="j1-checker.html">Go to checker</a>
+        </div>`;
+      return;
+    }
+
+    if (result.status === 'geocode_failed' || result.status === 'j1_query_failed') {
+      root.innerHTML = `
+        <div class="card">
+          <h2>${result.status === 'j1_query_failed' ? 'We could not complete the eligibility check' : "We couldn't locate that address"}</h2>
+          <div class="${result.status === 'j1_query_failed' ? 'notice-box' : 'error-box'}">${escapeHtml(result.message)}</div>
+          ${result.geocode ? `<p>Address matched to <strong>${escapeHtml(result.geocode.matchedAddress)}</strong>.</p>` : ''}
           <a class="btn-secondary" href="j1-checker.html">Try again</a>
         </div>`;
+      return;
+    }
+
+    if (!['eligible', 'not_eligible'].includes(result.status) || !result.j1 || !result.geocode) {
+      root.innerHTML = `<div class="card"><div class="error-box">Unexpected result. Please run the checker again.</div><a class="btn-secondary" href="j1-checker.html">Go to checker</a></div>`;
       return;
     }
 
@@ -45,9 +61,11 @@
     let html = `
       <div class="card">
         <h2>${j1.meetsBaseline ? 'This location meets the federal shortage-area baseline' : 'This location does not meet the federal shortage-area baseline'}</h2>
-        <p>Matched address: <strong>${escapeHtml(geocode.matchedAddress)}</strong> (geocoded via ${escapeHtml(geocode.source)})</p>
+        <p>Matched address: <strong>${escapeHtml(geocode.matchedAddress)}</strong> (geocoded via ${escapeHtml(geocode.source)}, ${escapeHtml(geocode.confidence)} confidence)</p>
+        ${geocode.confidence !== 'high' ? '<div class="notice-box">The address match is not exact. Confirm the matched address before relying on this result.</div>' : ''}
         <div class="${j1.meetsBaseline ? 'notice-box' : 'error-box'}">${escapeHtml(j1.baselineNote)}</div>
         ${j1.meetsHhsProgramThreshold ? `<div class="notice-box">${escapeHtml(j1.hhsProgramNote)}</div>` : ''}
+        ${j1.maxHpsaScore !== null && j1.maxHpsaScore !== undefined ? `<p>Highest HPSA score at this location: <strong>${escapeHtml(j1.maxHpsaScore)}</strong>.</p>` : ''}
       </div>`;
 
     // 2. Referral/agency CTA with consent — primary next step, only when eligible
@@ -89,8 +107,10 @@
         }
         ${
           j1.mua?.isInMua
-            ? `<p>Also within a designated MUA/MUP: <strong>${escapeHtml(j1.mua.activeFeatures[0]?.service_area_name)}</strong> (${escapeHtml(j1.mua.activeFeatures[0]?.designation_type_desc)}).</p>`
-            : '<p>Not within a currently designated MUA/MUP.</p>'
+            ? `<p>Also within a designated MUA/MUP: <strong>${escapeHtml(j1.mua?.activeFeatures?.[0]?.service_area_name || 'details unavailable')}</strong> (${escapeHtml(j1.mua?.activeFeatures?.[0]?.designation_type_desc || 'designation details unavailable')}).</p>`
+            : j1.mua?.error
+              ? '<div class="notice-box">We could not check MUA/MUP status right now. The HPSA portion of this result is still shown.</div>'
+              : '<p>Not within a currently designated MUA/MUP.</p>'
         }
       </div>`;
 
@@ -98,7 +118,7 @@
     html += `
       <div class="card">
         <p>To confirm ${escapeHtml(stateLabel)}'s specific Conrad 30 requirements and current slot availability, contact that state's Primary Care Office:</p>
-        <a href="${j1.statePcoDirectoryUrl}" target="_blank" rel="noopener">Find ${escapeHtml(stateLabel)}'s Primary Care Office (HRSA directory) &rarr;</a>
+        <a href="${escapeHtml(j1.statePcoDirectoryUrl)}" target="_blank" rel="noopener noreferrer">Find ${escapeHtml(stateLabel)}'s Primary Care Office (HRSA directory) &rarr;</a>
       </div>`;
 
     // 5. Disclaimers
@@ -117,15 +137,17 @@
         if (consentBox?.checked) {
           const consentRecord = {
             agency: '[Agency/Hospital Name]',
-            consentText: document.querySelector('#consent-agency-results + p').textContent.trim(),
+            consentText: document.querySelector('#consent-agency-results')?.parentElement?.querySelector('p')?.textContent.trim() || '',
             timestamp: new Date().toISOString(),
             checked: true,
           };
           sessionStorage.setItem('j1_consent_record', JSON.stringify(consentRecord));
         }
-        // Placeholder: wire this to the actual employer/agency referral
-        // destination once a specific partner integration is chosen.
-        alert('This would connect to partner employer listings once a referral integration is configured.');
+        const referralNotice = document.createElement('div');
+        referralNotice.className = 'notice-box';
+        referralNotice.textContent = 'Employer listings are not available yet. Contact the state Primary Care Office below to confirm current Conrad 30 opportunities.';
+        seeEmployersBtn.insertAdjacentElement('afterend', referralNotice);
+        seeEmployersBtn.disabled = true;
       });
     }
   }

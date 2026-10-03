@@ -16,7 +16,7 @@ export async function resolveCensusBenchmark(configuredBenchmark = DEFAULT_CENSU
   if (cachedBenchmark) return cachedBenchmark;
 
   try {
-    const res = await fetch(`${CENSUS_GEOCODER_BASE}/benchmarks?format=json`);
+    const res = await fetch(`${CENSUS_GEOCODER_BASE}/benchmarks?format=json`, { signal: AbortSignal.timeout(10000) });
     if (!res.ok) throw new Error(`benchmarks endpoint returned HTTP ${res.status}`);
     const data = await res.json();
     const names = (data.benchmarks || []).map((b) => b.benchmarkName);
@@ -78,7 +78,7 @@ export async function geocodeWithCensus(address) {
   url.searchParams.set('benchmark', benchmark);
   url.searchParams.set('format', 'json');
 
-  const res = await fetch(url.toString());
+  const res = await fetch(url.toString(), { signal: AbortSignal.timeout(10000) });
   if (!res.ok) {
     throw new Error(`Census geocoder returned HTTP ${res.status}`);
   }

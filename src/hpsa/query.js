@@ -3,6 +3,7 @@ import {
   HPSA_LAYER_IDS,
   HPSA_OUT_FIELDS,
   ELIGIBLE_STATUS_DESC,
+  SPECIALTY_TO_DISCIPLINE,
 } from '../config/hrsaConfig.js';
 
 /**
@@ -39,7 +40,7 @@ export async function queryHpsaLayer(layerId, lon, lat) {
   url.searchParams.set('outFields', HPSA_OUT_FIELDS.join(','));
   url.searchParams.set('returnGeometry', 'false');
 
-  const res = await fetch(url.toString());
+  const res = await fetch(url.toString(), { signal: AbortSignal.timeout(10000) });
   if (!res.ok) {
     throw new Error(`HRSA MapServer layer ${layerId} query returned HTTP ${res.status}`);
   }
@@ -150,15 +151,9 @@ export async function queryAllHpsaDisciplines(lon, lat) {
  * @returns {Promise<{layerId: number, discipline: string, eligibleFeatures: HpsaAttributes[], allFeatures: HpsaAttributes[]}>}
  */
 export async function queryHpsaForSpecialty(specialty, lon, lat) {
-  const disciplineByLayerName = {
-    physician: 'primary_care',
-    psychiatrist: 'mental_health',
-    dentist: 'dental',
-  };
-
-  const discipline = disciplineByLayerName[specialty];
+  const discipline = SPECIALTY_TO_DISCIPLINE[specialty];
   if (!discipline) {
-    throw new Error(`Unknown specialty "${specialty}". Expected one of: ${Object.keys(disciplineByLayerName).join(', ')}`);
+    throw new Error(`Unknown specialty "${specialty}". Expected one of: ${Object.keys(SPECIALTY_TO_DISCIPLINE).join(', ')}`);
   }
 
   const layerId = HPSA_LAYER_IDS[discipline];

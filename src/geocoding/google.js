@@ -18,7 +18,7 @@ export async function geocodeWithGoogle(address, apiKey) {
   url.searchParams.set('address', address);
   url.searchParams.set('key', apiKey);
 
-  const res = await fetch(url.toString());
+  const res = await fetch(url.toString(), { signal: AbortSignal.timeout(10000) });
   if (!res.ok) {
     throw new Error(`Google geocoder returned HTTP ${res.status}`);
   }

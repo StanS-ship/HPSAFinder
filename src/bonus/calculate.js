@@ -1,4 +1,5 @@
 import { CMS_BONUS_RATE, DEFAULT_PAYMENT_FACTOR } from '../config/hrsaConfig.js';
+import { DUAL_DISCIPLINE_NOTE } from '../consent/disclaimerText.js';
 
 /**
  * Calculate the CMS HPSA bonus (Section 2.3 / 4.3 / 7.5).
@@ -55,8 +56,6 @@ export function calculateBonus(annualPaidAmount, options = {}) {
     quarterlyBonus,
     bonusRate: CMS_BONUS_RATE,
     paymentFactorUsed: paymentFactor,
-    note: bothDisciplines
-      ? 'CMS pays only one 10% bonus per service even if the area is both a primary-care and mental-health HPSA.'
-      : null,
+    note: bothDisciplines ? DUAL_DISCIPLINE_NOTE : null,
   };
 }

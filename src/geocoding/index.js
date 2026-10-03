@@ -8,6 +8,7 @@ import { geocodeWithGoogle } from './google.js';
  * @property {'high'|'medium'|'low'} confidence
  * @property {string} matchedAddress
  * @property {'census'|'google'} source
+ * @property {string|null} stateAbbr
  */
 
 /**
@@ -51,14 +52,8 @@ export async function geocodeAddress(address, options = {}) {
   });
 
   if (!googleApiKey) {
-    // No fallback configured — return whatever Census gave us, even if
-    // low-confidence, so the caller can decide (or surface Section 5.5's
-    // "could not reliably locate" message if it's null).
-    if (censusResult) {
-      onLog({ geocoder: 'census', confidence: censusResult.confidence, fallbackUsed: false, fallbackAvailable: false });
-      return { ...censusResult, source: 'census' };
-    }
-    return null;
+    onLog({ geocoder: 'census', confidence: censusResult?.confidence ?? 'none', fallbackUsed: false, fallbackAvailable: false });
+    return censusResult?.confidence === 'high' ? { ...censusResult, source: 'census' } : null;
   }
 
   try {
@@ -71,11 +66,6 @@ export async function geocodeAddress(address, options = {}) {
     onLog({ geocoder: 'google', error: err.message, fallbackUsed: true });
   }
 
-  // Both geocoders failed to produce anything usable. If Census had at
-  // least a low-confidence match, prefer that over nothing.
-  if (censusResult) {
-    return { ...censusResult, source: 'census' };
-  }
-
+  // Do not query shortage-area boundaries with a low-confidence location.
   return null;
 }

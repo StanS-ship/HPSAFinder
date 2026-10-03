@@ -1,6 +1,6 @@
 import { queryAllHpsaDisciplines } from '../hpsa/query.js';
 import { checkMuaStatus } from '../mua/query.js';
-import { lookupStateByFips } from '../config/statesConfig.js';
+import { lookupStateByFips, STATE_FIPS_TO_INFO } from '../config/statesConfig.js';
 import { HHS_J1_PROGRAM_MIN_HPSA_SCORE, HRSA_STATE_PCO_DIRECTORY_URL } from '../config/hrsaConfig.js';
 
 /**
@@ -33,10 +33,13 @@ import { HHS_J1_PROGRAM_MIN_HPSA_SCORE, HRSA_STATE_PCO_DIRECTORY_URL } from '../
 export async function checkJ1BaselineEligibility(lon, lat, options = {}) {
   const { geocodedStateAbbr = null } = options;
 
-  const [hpsaByDiscipline, muaStatus] = await Promise.all([
-    queryAllHpsaDisciplines(lon, lat),
-    checkMuaStatus(lon, lat),
-  ]);
+  const hpsaByDiscipline = await queryAllHpsaDisciplines(lon, lat);
+  let muaStatus;
+  try {
+    muaStatus = await checkMuaStatus(lon, lat);
+  } catch (err) {
+    muaStatus = { isInMua: false, activeFeatures: [], allFeatures: [], error: err.message };
+  }
 
   const allActiveHpsaFeatures = hpsaByDiscipline.flatMap((d) => d.eligibleFeatures);
   const hasActiveHpsa = allActiveHpsaFeatures.length > 0;
@@ -53,7 +56,8 @@ export async function checkJ1BaselineEligibility(lon, lat, options = {}) {
   // returned (HPSA gives a state name directly; MUA only gives a FIPS code).
   let state = null;
   if (geocodedStateAbbr) {
-    state = { name: geocodedStateAbbr, abbr: geocodedStateAbbr };
+    const stateInfo = Object.values(STATE_FIPS_TO_INFO).find((candidate) => candidate.abbr === geocodedStateAbbr);
+    state = stateInfo ? { ...stateInfo } : { name: null, abbr: geocodedStateAbbr };
   } else {
     const hpsaWithState = allActiveHpsaFeatures.find((f) => f.primary_state_nm);
     if (hpsaWithState) {

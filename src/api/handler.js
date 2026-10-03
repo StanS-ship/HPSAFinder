@@ -91,20 +91,37 @@ export async function calculateHpsaBonus(input, options = {}) {
   }
 
   // Step 2: query the layer relevant to the chosen specialty
-  const primaryResult = await queryHpsaForSpecialty(specialty, geocode.lon, geocode.lat);
-
-  // Step 3: for physicians/psychiatrists, also check the other discipline
-  // so we can apply the Section 5.3 "only one bonus" annotation when a
-  // location is both a primary-care and mental-health HPSA.
-  let otherResult = null;
-  if (specialty === 'physician') {
-    otherResult = await queryHpsaForSpecialty('psychiatrist', geocode.lon, geocode.lat);
-  } else if (specialty === 'psychiatrist') {
-    otherResult = await queryHpsaForSpecialty('physician', geocode.lon, geocode.lat);
+  let primaryResult;
+  try {
+    primaryResult = await queryHpsaForSpecialty(specialty, geocode.lon, geocode.lat);
+  } catch (err) {
+    onLog({ hpsaQueryFailed: true, error: err.message });
+    return {
+      status: 'hpsa_query_failed',
+      message: 'We could not check the HPSA designation right now. Please try again shortly.',
+      geocode,
+      hpsa: null,
+      mua,
+      bonus: null,
+    };
   }
 
   const isEligible = primaryResult.eligibleFeatures.length > 0;
-  const bothDisciplines = isEligible && Boolean(otherResult && otherResult.eligibleFeatures.length > 0);
+
+  // Step 3: only query the other discipline when the selected discipline is
+  // eligible and the dual-discipline annotation can actually apply.
+  let otherResult = null;
+  try {
+    if (isEligible && specialty === 'physician') {
+      otherResult = await queryHpsaForSpecialty('psychiatrist', geocode.lon, geocode.lat);
+    } else if (isEligible && specialty === 'psychiatrist') {
+      otherResult = await queryHpsaForSpecialty('physician', geocode.lon, geocode.lat);
+    }
+  } catch (err) {
+    onLog({ otherDisciplineQueryFailed: true, error: err.message });
+  }
+
+  const bothDisciplines = Boolean(otherResult && otherResult.eligibleFeatures.length > 0);
 
   onLog({
     layersQueried: [primaryResult.layerId, otherResult?.layerId].filter(Boolean),
@@ -121,7 +138,8 @@ export async function calculateHpsaBonus(input, options = {}) {
         discipline: primaryResult.discipline,
         layerId: primaryResult.layerId,
         eligibleFeatures: [],
-        allFeaturesReturned: primaryResult.allFeatures,
+        allFeatures: primaryResult.allFeatures,
+          bothDisciplines: false,
       },
       mua,
       bonus: null,
@@ -194,9 +212,20 @@ export async function checkJ1Eligibility(input, options = {}) {
     };
   }
 
-  const j1Result = await checkJ1BaselineEligibility(geocode.lon, geocode.lat, {
-    geocodedStateAbbr: geocode.stateAbbr,
-  });
+  let j1Result;
+  try {
+    j1Result = await checkJ1BaselineEligibility(geocode.lon, geocode.lat, {
+      geocodedStateAbbr: geocode.stateAbbr,
+    });
+  } catch (err) {
+    onLog({ j1QueryFailed: true, error: err.message });
+    return {
+      status: 'j1_query_failed',
+      message: 'We could not check the shortage-area designations right now. Please try again shortly.',
+      geocode,
+      j1: null,
+    };
+  }
 
   onLog({
     j1BaselineMet: j1Result.meetsBaseline,
