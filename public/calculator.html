@@ -52,11 +52,10 @@
           <div class="field">
             <label for="specialty">Specialty</label>
             <select id="specialty" name="specialty" required>
-              <option value="physician">Physician (non-psychiatry)</option>
+              <option value="physician">Physician (MD/DO, non-psychiatry)</option>
               <option value="psychiatrist">Psychiatrist</option>
-              <option value="dentist">Dentist</option>
             </select>
-            <p class="field__hint">This determines which HRSA shortage-area layer (primary care, mental health, or dental) we check.</p>
+            <p class="field__hint">This determines which HRSA shortage-area layer we check. Dental HPSA designations do not qualify for the Medicare HPSA bonus.</p>
           </div>
 
           <div class="field">
@@ -66,9 +65,9 @@
           </div>
 
           <div class="field">
-            <label for="paymentFactor">Payment-factor adjustment (optional)</label>
-            <input type="number" id="paymentFactor" name="paymentFactor" min="0.01" step="0.01" placeholder="1.0" />
-            <p class="field__hint">If you only know your allowed charges rather than the amount actually paid, you can enter a ratio to convert (e.g., 0.8). Leave blank to skip — this is your own planning estimate, not a CMS-published figure.</p>
+            <label for="paidToAllowedRatio">Paid-to-allowed ratio (optional)</label>
+            <input type="number" id="paidToAllowedRatio" name="paidToAllowedRatio" min="0.01" step="0.01" placeholder="1.0" />
+            <p class="field__hint">If you only know your Medicare allowed amounts, enter the share Medicare actually pays (for example, 0.8). We'll multiply your allowed amount by this ratio before applying the 10% bonus. Leave blank if you entered the amount Medicare actually paid. This is your own planning estimate, not a CMS-published figure.</p>
           </div>
 
           <!-- Contact consent (kept for easy restore)
@@ -108,7 +107,7 @@
       <div>
         <h3 class="site-footer__heading">Tools</h3>
         <ul class="site-footer__links">
-          <li><a href="j1-checker.html">J-1 Visa Waiver Checker</a></li>
+          <li><a href="j1-checker.html">J-1 Waiver Check</a></li>
           <li><a href="calculator.html">Bonus Calculator</a></li>
         </ul>
       </div>
@@ -125,7 +124,7 @@
       </div>
     </div>
     <div class="site-footer__bottom">
-      HPSA Finder is an independent tool and is not affiliated with or endorsed by HRSA, CMS, or any government agency. HPSA designation data shown here is for informational purposes only and may not reflect the most current official designations. J-1 Waiver Check results are informational only and do not determine or guarantee waiver eligibility or compliance with any state's Conrad 30 requirements. Always verify designation status through the official HRSA HPSA Query Tool and J-1 waiver eligibility with your state's Conrad 30 Primary Care Office before making billing, practice, or visa decisions.
+      HPSA Finder is an independent tool and is not affiliated with or endorsed by HRSA, CMS, or any government agency. HPSA designation data shown here is for informational purposes only and may not reflect the most current official designations. J-1 Waiver Check results are informational only and do not determine or guarantee waiver eligibility or compliance with any state's Conrad 30 requirements. Always verify designation status through HRSA's HPSA Find tool and J-1 waiver eligibility with your state's Conrad 30 Primary Care Office before making billing, practice, or visa decisions.
     </div>
   </footer>
 

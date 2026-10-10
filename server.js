@@ -53,9 +53,9 @@ async function serveStatic(reqPath, res) {
 // replaced with a generic message before it leaves the server.
 const SAFE_VALIDATION_MESSAGES = new Set([
   'address is required.',
-  'specialty must be one of: physician, psychiatrist, dentist.',
+  'specialty must be one of: physician, psychiatrist.',
   'annualPaidAmount must be a non-negative number.',
-  'paymentFactor must be a positive number.',
+  'paidToAllowedRatio must be a positive number.',
 ]);
 
 const GENERIC_ERROR_MESSAGE =

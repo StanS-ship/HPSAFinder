@@ -5,6 +5,7 @@ import { calculateBonus } from '../bonus/calculate.js';
 import { checkJ1BaselineEligibility } from '../j1/eligibility.js';
 import {
   FULL_PARTIAL_COUNTY_DISCLAIMER,
+  CMS_VERIFICATION_NOTE,
   GEOCODE_FAILURE_MESSAGE,
   NOT_IN_HPSA_MESSAGE,
   MUA_NO_BONUS_NOTE,
@@ -18,11 +19,43 @@ import { HPSA_LAYER_IDS } from '../config/hrsaConfig.js';
 /**
  * @typedef {object} CalculatorInput
  * @property {string} address
- * @property {'physician'|'psychiatrist'|'dentist'} specialty
+ * @property {'physician'|'psychiatrist'} specialty
  * @property {number} annualPaidAmount - estimated annual Medicare-paid amount
- * @property {number} [paymentFactor] - optional override of the configurable payment-factor estimate
+ * @property {number} [paidToAllowedRatio] - optional user planning estimate converting allowed charges to paid amounts
  * @property {string} [googleApiKey] - optional, enables the Google fallback geocoder
  */
+
+/**
+ * CMS pays the HPSA bonus based on designations in effect as of December 31
+ * of the PRIOR year. An area designated during the current calendar year is
+ * not bonus-eligible until January 1 of the next year.
+ *
+ * @param {Date} [now]
+ * @returns {{cutoffDate: Date, nextYear: number}}
+ */
+export function cmsDesignationCutoff(now = new Date()) {
+  const year = now.getUTCFullYear();
+  return { cutoffDate: new Date(Date.UTC(year - 1, 11, 31)), nextYear: year + 1 };
+}
+
+/**
+ * Classify a designated feature against the CMS December 31 cutoff.
+ *
+ * @param {object} feature - parsed HPSA feature
+ * @param {Date} cutoffDate - December 31 of the prior year
+ * @returns {'likely_eligible'|'not_yet_eligible'|'withdrawn'|'designation_date_missing'}
+ */
+export function classifyDesignation(feature, cutoffDate) {
+  if (feature.hpsa_status_desc === 'Withdrawn') return 'withdrawn';
+
+  const raw = feature.designation_dt;
+  if (raw === null || raw === undefined || raw === '') return 'designation_date_missing';
+
+  const designated = new Date(raw);
+  if (Number.isNaN(designated.getTime())) return 'designation_date_missing';
+
+  return designated.getTime() <= cutoffDate.getTime() ? 'likely_eligible' : 'not_yet_eligible';
+}
 
 /**
  * Runs the full pipeline described in Section 4 of the research brief:
@@ -46,13 +79,13 @@ import { HPSA_LAYER_IDS } from '../config/hrsaConfig.js';
  */
 export async function calculateHpsaBonus(input, options = {}) {
   const { onLog = () => {} } = options;
-  const { address, specialty, annualPaidAmount, paymentFactor, googleApiKey } = input;
+  const { address, specialty, annualPaidAmount, paidToAllowedRatio, googleApiKey } = input;
 
   if (!address || !address.trim()) {
     throw new Error('address is required.');
   }
-  if (!specialty || !(specialty in { physician: 1, psychiatrist: 1, dentist: 1 })) {
-    throw new Error('specialty must be one of: physician, psychiatrist, dentist.');
+  if (!specialty || !(specialty in { physician: 1, psychiatrist: 1 })) {
+    throw new Error('specialty must be one of: physician, psychiatrist.');
   }
   if (typeof annualPaidAmount !== 'number' || Number.isNaN(annualPaidAmount) || annualPaidAmount < 0) {
     throw new Error('annualPaidAmount must be a non-negative number.');
@@ -106,10 +139,14 @@ export async function calculateHpsaBonus(input, options = {}) {
     };
   }
 
+  const { cutoffDate, nextYear } = cmsDesignationCutoff();
+  const designationClass = classifyDesignation(primaryResult.eligibleFeatures[0] ?? {}, cutoffDate);
+
   const isEligible = primaryResult.eligibleFeatures.length > 0;
 
-  // Step 3: only query the other discipline when the selected discipline is
-  // eligible and the dual-discipline annotation can actually apply.
+  // Step 3: check the other discipline so the dual-discipline annotation can
+  // apply (psychiatrist queried both primary-care and mental-health layers;
+  // for a physician, check mental health for the annotation).
   let otherResult = null;
   try {
     if (isEligible && specialty === 'physician') {
@@ -129,7 +166,7 @@ export async function calculateHpsaBonus(input, options = {}) {
     bothDisciplines,
   });
 
-  if (!isEligible) {
+  if (!isEligible || designationClass === 'withdrawn') {
     return {
       status: 'not_in_hpsa',
       message: NOT_IN_HPSA_MESSAGE,
@@ -143,13 +180,16 @@ export async function calculateHpsaBonus(input, options = {}) {
       },
       mua,
       bonus: null,
+      cmsVerificationNote: CMS_VERIFICATION_NOTE,
     };
   }
 
-  // Step 4: bonus calculation
-  const bonus = calculateBonus(annualPaidAmount, { paymentFactor, bothDisciplines });
+  // Step 4: bonus calculation — only for designations already in effect at
+  // the CMS cutoff. A designation dated after the cutoff is reported as
+  // "not yet bonus-eligible" with a projected next-year estimate instead.
+  const bonus = calculateBonus(annualPaidAmount, { paidToAllowedRatio, bothDisciplines });
 
-  return {
+  const baseResult = {
     status: 'eligible',
     message: null,
     geocode,
@@ -163,6 +203,36 @@ export async function calculateHpsaBonus(input, options = {}) {
     bonus,
     disclaimers: {
       fullPartialCounty: FULL_PARTIAL_COUNTY_DISCLAIMER,
+    },
+    cmsVerificationNote: CMS_VERIFICATION_NOTE,
+  };
+
+  if (designationClass === 'not_yet_eligible') {
+    return {
+      ...baseResult,
+      bonusEligibility: {
+        classification: 'not_yet_eligible',
+        cutoffDate: cutoffDate.toISOString(),
+        nextYear,
+      },
+    };
+  }
+
+  if (designationClass === 'designation_date_missing') {
+    return {
+      ...baseResult,
+      bonusEligibility: {
+        classification: 'designation_date_missing',
+        cutoffDate: cutoffDate.toISOString(),
+      },
+    };
+  }
+
+  return {
+    ...baseResult,
+    bonusEligibility: {
+      classification: 'likely_eligible',
+      cutoffDate: cutoffDate.toISOString(),
     },
   };
 }

@@ -30,9 +30,7 @@ export const HPSA_LAYER_IDS = Object.freeze({
 export const SPECIALTY_TO_DISCIPLINE = Object.freeze({
   physician: 'primary_care',
   psychiatrist: 'mental_health',
-  dentist: 'dental',
 });
-
 export const CENSUS_GEOCODER_BASE = 'https://geocoding.geo.census.gov/geocoder';
 
 export const GOOGLE_GEOCODER_BASE = 'https://maps.googleapis.com/maps/api/geocode/json';
@@ -127,17 +125,6 @@ export const MUA_ELIGIBLE_STATUS_DESC = 'Designated';
  * CMS bonus rules (Section 2.3 / 4.3).
  */
 export const CMS_BONUS_RATE = 0.10; // 10% of the amount Medicare actually pays
-
-/**
- * The "payment factor" (allowed-charge-to-paid-amount ratio) is explicitly
- * NOT an official CMS-published constant — it's a planning approximation.
- * Keep it user-configurable (env var or UI input), default to 1.0 (i.e.,
- * "treat the input amount as already the paid amount") so the app never
- * silently invents a multiplier.
- */
-export const DEFAULT_PAYMENT_FACTOR = Number(
-  (typeof process !== 'undefined' && process.env && process.env.DEFAULT_PAYMENT_FACTOR) || 1.0
-);
 
 /**
  * J-1 Visa Waiver (Conrad 30 / HHS program) related constants.

@@ -43,9 +43,10 @@ attorney) for the J-1 waiver check.
    the bonus math.
 4. **Bonus calculation** (`src/bonus/`) — applies the CMS 10% bonus rate
    to the estimated annual Medicare-paid amount, split into an annual and
-   quarterly figure. The "payment factor" (allowed-charge-to-paid-amount
-   ratio) is a **user-configurable estimate**, never a hardcoded CMS
-   constant — see the note in `src/config/hrsaConfig.js`.
+   approximate quarterly figure. The paid-to-allowed ratio
+   (allowed-charge-to-paid-amount) is a **user-configurable estimate**,
+   never a hardcoded CMS constant — see the note in
+   `src/config/hrsaConfig.js`.
 5. **Disclaimers & consent copy** (`src/consent/`) — verbatim TCPA/FTC
    consent language and the HRSA/CMS non-affiliation disclaimer, kept in
    one file so legal copy only needs to be edited in one place.
@@ -148,7 +149,6 @@ their location qualifies. See `REFERRAL_FEE_DISCLOSURE` in
    - `CENSUS_BENCHMARK` — defaults to `Public_AR_Current`; the app also
      reconfirms this against Census's live `/geocoder/benchmarks`
      endpoint at request time and logs a warning if it's stale.
-   - `DEFAULT_PAYMENT_FACTOR` — defaults to `1.0` (no adjustment).
 3. Run the optional local reference server:
    ```bash
    npm start
@@ -210,9 +210,9 @@ To bring it into a Bolt.new project:
   summary table instead, budget real one-time research effort per state
   plus a recurring annual re-verification pass — see the design
   discussion referenced in this project's history for the tradeoffs.
-- **The "payment factor" is a planning estimate**, not an official CMS
-  multiplier — it is intentionally exposed as a configurable input, never
-  hardcoded as if it were authoritative.
+- **The paid-to-allowed ratio is a planning estimate**, not an official
+  CMS multiplier — it is intentionally exposed as a configurable input,
+  never hardcoded as if it were authoritative.
 - **Lead-capture consent (Section 6.1)** appears on both the bonus
   calculator and the J-1 checker (`public/calculator.html` and
   `public/j1-checker.html`, plus the referral CTA on

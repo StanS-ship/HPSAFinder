@@ -32,6 +32,14 @@ export const FULL_PARTIAL_COUNTY_DISCLAIMER =
   "This tool identifies whether your location falls within a designated HPSA. Some ZIP codes split across full- and partial-county HPSA boundaries may require an AQ modifier on claims. Verify your exact billing requirements with your MAC or CMS's published bonus ZIP code list.";
 
 /**
+ * Shown below every bonus-calculator result: CMS determines bonus payment
+ * from its own annual designation snapshot, so the live HRSA check is only
+ * a first-pass estimate.
+ */
+export const CMS_VERIFICATION_NOTE =
+  "Confirm eligibility using CMS's annual HPSA bonus ZIP-code file or with your Medicare Administrative Contractor (MAC). Services in ZIP codes that don't fully fall within an HPSA may require the AQ modifier.";
+
+/**
  * Shown alongside any MUA/MUP result. Unlike an HPSA designation, MUA/MUP
  * status does NOT trigger the CMS 10% Medicare bonus — it's relevant to
  * other things (FQHC/Section 330 eligibility, Rural Health Clinic
@@ -43,7 +51,7 @@ export const MUA_NO_BONUS_NOTE =
 
 /** 5.3 — Shown when a location is both a primary-care and mental-health HPSA. */
 export const DUAL_DISCIPLINE_NOTE =
-  'CMS pays only one 10% bonus per service even if the area is both a primary-care and mental-health HPSA.';
+  'This location is in both a primary care and a mental health HPSA. Only one 10% bonus is paid per service.';
 
 /** 5.5 — Shown when both geocoders fail or return low confidence. */
 export const GEOCODE_FAILURE_MESSAGE =
@@ -61,7 +69,7 @@ export const REFERRAL_FEE_DISCLOSURE =
   'Some links and referrals on this site are to organizations we partner with. We may receive a referral fee or commission if you choose to connect with them or accept a position. Our recommendations are based on our assessment of their services, but you should consider this financial relationship when evaluating them.';
 
 /**
- * J-1 Visa Waiver checker copy. This tool checks the federal shortage-
+ * J-1 Waiver Check copy. This tool checks the federal shortage-
  * area baseline only — it does NOT evaluate any individual state's
  * Conrad 30 program rules (score cutoffs, Medicaid percentages, specialty
  * priority, slot availability), which vary by state and change yearly.

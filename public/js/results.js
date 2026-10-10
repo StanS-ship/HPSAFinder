@@ -54,28 +54,50 @@
     if (result.status === 'not_in_hpsa') {
       root.innerHTML = `
         <div class="card">
-          <h2>${escapeHtml(result.message)}</h2>
+          <h2>Not eligible</h2>
+          <p>${escapeHtml(result.message)}</p>
           <p>The address matched to <strong>${escapeHtml(result.geocode.matchedAddress)}</strong> (geocoded via ${escapeHtml(result.geocode.source)}, ${escapeHtml(result.geocode.confidence)} confidence) does not fall within an active, geographic ${escapeHtml(labelForDiscipline(result.hpsa.discipline))} HPSA.</p>
           <p>No CMS bonus applies for services furnished at this location under the selected specialty.</p>
           <a class="btn-secondary" href="calculator.html">Run another estimate</a>
         </div>
+        ${cmsVerificationCard(result.cmsVerificationNote)}
         ${renderMuaCard(result.mua)}
         ${nonAffiliationDisclaimer()}`;
       return;
     }
 
     if (result.status === 'eligible') {
-      const { bonus, hpsa, geocode } = result;
+      const { bonus, hpsa, geocode, bonusEligibility, cmsVerificationNote } = result;
       const feature = hpsa.eligibleFeatures[0];
+      const notYet = bonusEligibility?.classification === 'not_yet_eligible';
+      const dateMissing = bonusEligibility?.classification === 'designation_date_missing';
+      const cutoffLabel = bonusEligibility?.cutoffDate
+        ? new Date(bonusEligibility.cutoffDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        : null;
 
       root.innerHTML = `
         <div class="card">
-          <h2>This location is in a designated HPSA</h2>
+          <h2>${notYet ? 'Designated, but not yet bonus-eligible' : 'Likely eligible'}</h2>
           <p>Matched address: <strong>${escapeHtml(geocode.matchedAddress)}</strong> (geocoded via ${escapeHtml(geocode.source)}, ${escapeHtml(geocode.confidence)} confidence)</p>
 
+          ${notYet ? `<div class="notice-box">CMS uses designations in effect as of ${escapeHtml(cutoffLabel)}. This designation becomes eligible for the bonus starting January 1, ${escapeHtml(String(bonusEligibility.nextYear))}.</div>` : ''}
+          ${dateMissing ? `<div class="notice-box">Designation date unavailable. Verify that it was in effect as of ${escapeHtml(cutoffLabel)}.</div>` : ''}
           ${bonus.note ? `<div class="notice-box">${escapeHtml(bonus.note)}</div>` : ''}
           ${geocode.confidence !== 'high' ? `<div class="notice-box">The address match is not exact. Confirm the matched address before relying on this estimate.</div>` : ''}
 
+          ${notYet ? `
+          <div class="result-figure">
+            <div class="result-figure__item">
+              <span class="result-figure__value">${money(bonus.annualBonus)}</span>
+              <span class="result-figure__label">Projected next-year estimate (annual)</span>
+            </div>
+            <div class="result-figure__item">
+              <span class="result-figure__value">${money(bonus.quarterlyBonus)}</span>
+              <span class="result-figure__label">Projected next-year estimate (approximate quarterly)</span>
+            </div>
+          </div>
+          <p style="font-size:0.85rem;color:var(--muted)">No bonus is payable for the current year. The figures above are a projection only.</p>
+          ` : `
           <div class="result-figure">
             <div class="result-figure__item">
               <span class="result-figure__value">${money(bonus.annualBonus)}</span>
@@ -83,13 +105,14 @@
             </div>
             <div class="result-figure__item">
               <span class="result-figure__value">${money(bonus.quarterlyBonus)}</span>
-              <span class="result-figure__label">Estimated quarterly payment</span>
+              <span class="result-figure__label">Approximate quarterly payment</span>
             </div>
           </div>
+          `}
 
           <p style="font-size:0.85rem;color:var(--muted)">
             Based on ${money(bonus.adjustedPaidAmount)} in estimated annual Medicare-paid amount
-            ${bonus.paymentFactorUsed !== 1 ? `(after applying your ${bonus.paymentFactorUsed}× payment-factor adjustment) ` : ''}
+            ${bonus.paidToAllowedRatioUsed !== 1 ? `(after applying your ${bonus.paidToAllowedRatioUsed}× paid-to-allowed ratio) ` : ''}
             at the CMS HPSA bonus rate of ${(bonus.bonusRate * 100).toFixed(0)}%.
           </p>
         </div>
@@ -98,7 +121,7 @@
           <h2>Shortage-area details</h2>
           <dl class="attr-list">
             <dt>Designation type</dt><dd>${escapeHtml(feature.hpsa_typ_desc)}</dd>
-            <dt>HPSA score</dt><dd>${escapeHtml(feature.hpsa_score)}</dd>
+            <dt>HPSA score</dt><dd>${escapeHtml(feature.hpsa_score)}${scoreRangeNote(hpsa.discipline)}</dd>
             <dt>Status</dt><dd>${escapeHtml(feature.hpsa_status_desc)}</dd>
             <dt>Rural/urban status</dt><dd>${escapeHtml(feature.rural_status_desc)}</dd>
             <dt>Discipline</dt><dd>${escapeHtml(feature.discipline_class_desc)}</dd>
@@ -107,6 +130,7 @@
           </dl>
         </div>
 
+        ${cmsVerificationCard(cmsVerificationNote)}
         ${renderMuaCard(result.mua)}
 
         <div class="card">
@@ -147,6 +171,18 @@
 
   function labelForDiscipline(discipline) {
     return { primary_care: 'primary care', mental_health: 'mental health', dental: 'dental' }[discipline] || discipline;
+  }
+
+  function scoreRangeNote(discipline) {
+    return discipline === 'dental' ? ' (scale 0–26)' : ' (scale 0–25)';
+  }
+
+  function cmsVerificationCard(note) {
+    if (!note) return '';
+    return `
+      <div class="card">
+        <div class="disclaimer">${escapeHtml(note)}</div>
+      </div>`;
   }
 
   function formatDate(value) {

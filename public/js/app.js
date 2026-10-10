@@ -28,7 +28,7 @@
     const address = formData.get('address')?.toString().trim();
     const specialty = formData.get('specialty')?.toString();
     const annualPaidAmountRaw = formData.get('annualPaidAmount')?.toString();
-    const paymentFactorRaw = formData.get('paymentFactor')?.toString();
+    const paidToAllowedRatioRaw = formData.get('paidToAllowedRatio')?.toString();
     const consentAgency = formData.get('consentAgency') === 'on';
 
     if (!address) {
@@ -42,11 +42,11 @@
       return;
     }
 
-    let paymentFactor;
-    if (paymentFactorRaw) {
-      paymentFactor = Number(paymentFactorRaw);
-      if (Number.isNaN(paymentFactor) || paymentFactor <= 0) {
-        showError('Payment-factor adjustment must be a positive number, if provided.');
+    let paidToAllowedRatio;
+    if (paidToAllowedRatioRaw) {
+      paidToAllowedRatio = Number(paidToAllowedRatioRaw);
+      if (Number.isNaN(paidToAllowedRatio) || paidToAllowedRatio <= 0) {
+        showError('Paid-to-allowed ratio must be a positive number, if provided.');
         return;
       }
     }
@@ -73,7 +73,7 @@
       const res = await fetch('/api/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address, specialty, annualPaidAmount, paymentFactor }),
+        body: JSON.stringify({ address, specialty, annualPaidAmount, paidToAllowedRatio }),
       });
 
       const result = await res.json();

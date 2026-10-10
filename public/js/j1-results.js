@@ -80,7 +80,7 @@
         ${geocode.confidence !== 'high' ? '<div class="notice-box">The address match is not exact. Confirm the matched address before relying on this result.</div>' : ''}
         <div class="${j1.meetsBaseline ? 'notice-box' : 'error-box'}">${escapeHtml(j1.baselineNote)}</div>
         ${j1.meetsHhsProgramThreshold ? `<div class="notice-box">${escapeHtml(j1.hhsProgramNote)}</div>` : ''}
-        ${j1.maxHpsaScore !== null && j1.maxHpsaScore !== undefined ? `<p>Highest HPSA score at this location: <strong>${escapeHtml(j1.maxHpsaScore)}</strong>.</p>` : ''}
+        ${j1.maxHpsaScore !== null && j1.maxHpsaScore !== undefined ? `<p>Highest HPSA score at this location: <strong>${escapeHtml(j1.maxHpsaScore)}</strong> (scale 0–25 for primary care and mental health).</p>` : ''}
       </div>`;
 
     // 2. Referral/agency CTA with consent — disabled until referral

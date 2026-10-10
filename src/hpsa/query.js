@@ -140,26 +140,38 @@ export async function queryAllHpsaDisciplines(lon, lat) {
 /**
  * Given a specialty, run the correct layer query/queries and return only
  * the features that are geographic + currently designated (Section 5.1,
- * 5.3, 5.5). If a location happens to intersect more than one polygon in
- * the layer (rare, but possible at boundary edges), all qualifying
- * features are returned — the bonus calculator only needs to know "is
- * this location HPSA-eligible for this discipline," not how many
- * overlapping polygons exist.
+ * 5.3, 5.5). Under CMS rules, physicians (including psychiatrists) qualify
+ * in geographic primary care HPSAs, and psychiatrists additionally qualify
+ * in geographic mental health HPSAs — so "psychiatrist" checks both layers
+ * and is eligible if either one matches. If a location intersects more
+ * than one polygon in a layer (rare, but possible at boundary edges), all
+ * qualifying features are returned.
  *
- * @param {'physician'|'psychiatrist'|'dentist'} specialty
+ * @param {'physician'|'psychiatrist'} specialty
  * @param {number} lon
  * @param {number} lat
  * @returns {Promise<{layerId: number, discipline: string, eligibleFeatures: HpsaAttributes[], allFeatures: HpsaAttributes[]}>}
  */
 export async function queryHpsaForSpecialty(specialty, lon, lat) {
-  const discipline = SPECIALTY_TO_DISCIPLINE[specialty];
-  if (!discipline) {
+  const primaryDiscipline = SPECIALTY_TO_DISCIPLINE[specialty];
+  if (!primaryDiscipline) {
     throw new Error(`Unknown specialty "${specialty}". Expected one of: ${Object.keys(SPECIALTY_TO_DISCIPLINE).join(', ')}`);
   }
 
-  const layerId = HPSA_LAYER_IDS[discipline];
-  const allFeatures = await queryHpsaLayer(layerId, lon, lat);
-  const eligibleFeatures = allFeatures.filter((f) => isGeographicHpsa(f) && isCurrentlyDesignated(f));
+  // Psychiatrists qualify in both primary care and mental health geographic
+  // HPSAs; physicians qualify in primary care only.
+  const disciplines = specialty === 'psychiatrist' && primaryDiscipline === 'mental_health'
+    ? ['primary_care', 'mental_health']
+    : [primaryDiscipline];
 
-  return { layerId, discipline, eligibleFeatures, allFeatures };
+  const layerResults = await Promise.all(
+    disciplines.map(async (discipline) => {
+      const layerId = HPSA_LAYER_IDS[discipline];
+      const allFeatures = await queryHpsaLayer(layerId, lon, lat);
+      const eligibleFeatures = allFeatures.filter((f) => isGeographicHpsa(f) && isCurrentlyDesignated(f));
+      return { layerId, discipline, eligibleFeatures, allFeatures };
+    })
+  );
+
+  return layerResults.find((r) => r.eligibleFeatures.length > 0) ?? layerResults[0];
 }
