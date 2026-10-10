@@ -1,0 +1,4 @@
+# Supabase Edge Functions configuration
+
+[functions.contact-form]
+verify_jwt = true
