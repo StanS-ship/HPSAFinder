@@ -2,6 +2,7 @@ import { queryAllHpsaDisciplines } from '../hpsa/query.js';
 import { checkMuaStatus } from '../mua/query.js';
 import { lookupStateByFips, STATE_FIPS_TO_INFO } from '../config/statesConfig.js';
 import { HHS_J1_PROGRAM_MIN_HPSA_SCORE, HRSA_STATE_PCO_DIRECTORY_URL } from '../config/hrsaConfig.js';
+import { getConrad30ProgramLink } from '../config/conrad30Config.js';
 
 /**
  * @typedef {object} J1EligibilityResult
@@ -12,6 +13,8 @@ import { HHS_J1_PROGRAM_MIN_HPSA_SCORE, HRSA_STATE_PCO_DIRECTORY_URL } from '../
  * @property {{isInMua: boolean, activeFeatures: object[]}} mua
  * @property {{name: string, abbr: string}|null} state
  * @property {string} statePcoDirectoryUrl - HRSA's live-maintained state PCO directory link
+ * @property {{url: string, agency: string|null, isStateSpecific: boolean}} stateConrad30Program -
+ *   the state's own Conrad 30 program page, or the HRSA directory if none is on file
  */
 
 /**
@@ -78,5 +81,6 @@ export async function checkJ1BaselineEligibility(lon, lat, options = {}) {
     mua: { isInMua: muaStatus.isInMua, activeFeatures: muaStatus.activeFeatures },
     state,
     statePcoDirectoryUrl: HRSA_STATE_PCO_DIRECTORY_URL,
+    stateConrad30Program: getConrad30ProgramLink(state, STATE_FIPS_TO_INFO),
   };
 }

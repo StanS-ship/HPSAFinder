@@ -3,7 +3,8 @@
  *   1. Eligibility finding
  *   2. Referral/agency CTA with consent (primary next-step, when eligible)
  *   3. HPSA score / MUA details
- *   4. State PCO directory link (secondary placement, still present)
+ *   4. State Conrad 30 program link (secondary placement, still present);
+ *      falls back to HRSA's PCO directory when no state page is on file
  *   5. Disclaimers
  */
 (function () {
@@ -114,11 +115,21 @@
         }
       </div>`;
 
-    // 4. State PCO directory link — secondary placement, still present
+    // 4. State Conrad 30 program link — secondary placement, still present.
+    //    Falls back to HRSA's PCO directory when no state page is on file
+    //    (or for results saved before this field existed).
+    const program = j1.stateConrad30Program;
+    const hasStatePage = Boolean(program?.isStateSpecific && program?.url);
+    const linkUrl = hasStatePage ? program.url : (program?.url || j1.statePcoDirectoryUrl);
+    const possessive = j1.state?.name ? `${j1.state.name}'s` : "your state's";
     html += `
       <div class="card">
-        <p>To confirm ${escapeHtml(stateLabel)}'s specific Conrad 30 requirements and current slot availability, contact that state's Primary Care Office:</p>
-        <a href="${escapeHtml(j1.statePcoDirectoryUrl)}" target="_blank" rel="noopener noreferrer">Find ${escapeHtml(stateLabel)}'s Primary Care Office (HRSA directory) &rarr;</a>
+        <p>To confirm ${escapeHtml(stateLabel)}'s specific Conrad 30 requirements and current slot availability, check the state's program page${hasStatePage && program.agency ? ` (run by the ${escapeHtml(program.agency)})` : ''}:</p>
+        <a href="${escapeHtml(linkUrl)}" target="_blank" rel="noopener noreferrer">${
+          hasStatePage
+            ? `Visit ${escapeHtml(possessive)} Conrad 30 program page &rarr;`
+            : `Find ${escapeHtml(possessive)} Primary Care Office (HRSA directory) &rarr;`
+        }</a>
       </div>`;
 
     // 5. Disclaimers
@@ -145,7 +156,7 @@
         }
         const referralNotice = document.createElement('div');
         referralNotice.className = 'notice-box';
-        referralNotice.textContent = 'Employer listings are not available yet. Contact the state Primary Care Office below to confirm current Conrad 30 opportunities.';
+        referralNotice.textContent = 'Employer listings are not available yet. Check the state Conrad 30 program page below to confirm current Conrad 30 opportunities.';
         seeEmployersBtn.insertAdjacentElement('afterend', referralNotice);
         seeEmployersBtn.disabled = true;
       });

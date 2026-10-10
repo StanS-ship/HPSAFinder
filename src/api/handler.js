@@ -181,7 +181,8 @@ export async function calculateHpsaBonus(input, options = {}) {
  *      geographic HPSA (any discipline) or an active MUA/MUP designation.
  *   3. Flag whether it separately meets the HHS J-1 program's HPSA
  *      score >= 7 threshold.
- *   4. Attach the state PCO directory link and the state-variation
+ *   4. Attach the state's Conrad 30 program link (or the HRSA PCO
+ *      directory as a fallback) and the state-variation
  *      caveat — this checker does NOT evaluate individual state Conrad 30
  *      rules (see J1_STATE_VARIATION_CAVEAT for why).
  *
@@ -246,6 +247,7 @@ export async function checkJ1Eligibility(input, options = {}) {
       mua: j1Result.mua,
       state: j1Result.state,
       statePcoDirectoryUrl: j1Result.statePcoDirectoryUrl,
+      stateConrad30Program: j1Result.stateConrad30Program,
       stateVariationCaveat: J1_STATE_VARIATION_CAVEAT,
     },
   };
