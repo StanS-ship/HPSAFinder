@@ -80,8 +80,13 @@ Deno.serve(async (req: Request) => {
       return json({ error: "We could not save your message. Please try again." }, 500);
     }
 
-    const resendKey = Deno.env.get("RESEND_API_KEY");
-    if (!resendKey) {
+    // The key may be stored under its standard name or a custom name
+    // (e.g. "HPSAFinder") — try both.
+    const resendKey =
+      Deno.env.get("RESEND_API_KEY") ??
+      Deno.env.get("HPSAFinder") ??
+      null;
+    if (!resendKey || !resendKey.startsWith("re_")) {
       // Message is stored; email delivery stays 'pending' until the key is added.
       await supabase
         .from("contact_messages")
