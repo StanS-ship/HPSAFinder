@@ -12,6 +12,26 @@ const OWNER_EMAIL = "stan@grantsrepublic.com";
 const MAX_LENGTHS = { name: 200, email: 320, message: 10000 };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Server-side abuse control: at most RATE_LIMIT_MAX submissions from the same
+// caller within RATE_LIMIT_WINDOW_MS. The browser's disabled submit button is
+// not a control — a direct HTTP call skips it entirely.
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+
+function callerIp(req: Request): string {
+  const forwarded = req.headers.get("x-forwarded-for") ?? "";
+  const first = forwarded.split(",")[0].trim();
+  return first || req.headers.get("cf-connecting-ip") || "unknown";
+}
+
+async function hashIp(ip: string): Promise<string> {
+  const data = new TextEncoder().encode(`hpsafinder-contact:${ip}`);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 function clean(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
@@ -68,6 +88,42 @@ Deno.serve(async (req: Request) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    const ipHash = await hashIp(callerIp(req));
+    const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+
+    const { count: recentCount, error: throttleReadError } = await supabase
+      .from("contact_submission_throttle")
+      .select("id", { count: "exact", head: true })
+      .eq("ip_hash", ipHash)
+      .gte("created_at", windowStart);
+
+    if (throttleReadError) {
+      console.error("Throttle read failed:", throttleReadError.message);
+      return json({ error: "We could not accept your message right now. Please try again." }, 500);
+    }
+
+    if ((recentCount ?? 0) >= RATE_LIMIT_MAX) {
+      return json(
+        { error: "Too many messages sent recently. Please wait a few minutes and try again." },
+        429,
+      );
+    }
+
+    const { error: throttleWriteError } = await supabase
+      .from("contact_submission_throttle")
+      .insert({ ip_hash: ipHash });
+
+    if (throttleWriteError) {
+      console.error("Throttle write failed:", throttleWriteError.message);
+      return json({ error: "We could not accept your message right now. Please try again." }, 500);
+    }
+
+    // Opportunistic cleanup of expired throttle rows.
+    await supabase
+      .from("contact_submission_throttle")
+      .delete()
+      .lt("created_at", new Date(Date.now() - RATE_LIMIT_WINDOW_MS * 6).toISOString());
 
     const { data: saved, error: saveError } = await supabase
       .from("contact_messages")

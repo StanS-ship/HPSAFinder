@@ -13,7 +13,20 @@
   function escapeHtml(str) {
     const div = document.createElement('div');
     div.textContent = str ?? '';
-    return div.innerHTML;
+    // textContent -> innerHTML encodes & < >, but leaves quotes intact, which
+    // is unsafe inside an attribute. Encode them explicitly.
+    return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // Only http(s) links are ever rendered; anything else (javascript:, data:)
+  // is dropped rather than turned into a clickable link.
+  function safeUrl(value) {
+    try {
+      const parsed = new URL(String(value ?? ''), window.location.href);
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.href : '';
+    } catch {
+      return '';
+    }
   }
 
   function render() {
@@ -125,7 +138,7 @@
     html += `
       <div class="card">
         <p>To confirm ${escapeHtml(stateLabel)}'s specific Conrad 30 requirements and current slot availability, check the state's program page${hasStatePage && program.agency ? ` (run by the ${escapeHtml(program.agency)})` : ''}:</p>
-        <a href="${escapeHtml(linkUrl)}" target="_blank" rel="noopener noreferrer">${
+        <a href="${escapeHtml(safeUrl(linkUrl))}" target="_blank" rel="noopener noreferrer">${
           hasStatePage
             ? `Visit ${escapeHtml(possessive)} Conrad 30 program page &rarr;`
             : `Find ${escapeHtml(possessive)} Primary Care Office (HRSA directory) &rarr;`

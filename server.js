@@ -47,6 +47,28 @@ async function serveStatic(reqPath, res) {
   }
 }
 
+// Only these exact messages come from input validation and are safe to show
+// the caller. Every other error (upstream HTTP failures, missing environment
+// configuration, unexpected exceptions) carries internal detail and must be
+// replaced with a generic message before it leaves the server.
+const SAFE_VALIDATION_MESSAGES = new Set([
+  'address is required.',
+  'specialty must be one of: physician, psychiatrist, dentist.',
+  'annualPaidAmount must be a non-negative number.',
+  'paymentFactor must be a positive number.',
+]);
+
+const GENERIC_ERROR_MESSAGE =
+  'We could not complete that lookup right now. Please try again in a moment.';
+
+function sendError(res, err, logLabel) {
+  console.error(logLabel, err);
+  const message = err && SAFE_VALIDATION_MESSAGES.has(err.message) ? err.message : null;
+  const status = message ? 400 : 500;
+  res.writeHead(status, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ error: message ?? GENERIC_ERROR_MESSAGE }));
+}
+
 async function handleApiCalculate(req, res) {
   let body = '';
   for await (const chunk of req) body += chunk;
@@ -68,9 +90,7 @@ async function handleApiCalculate(req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(result));
   } catch (err) {
-    console.error(err);
-    res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: err.message }));
+    sendError(res, err, '[hpsa-calculator]');
   }
 }
 
@@ -95,9 +115,7 @@ async function handleApiJ1Check(req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(result));
   } catch (err) {
-    console.error(err);
-    res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: err.message }));
+    sendError(res, err, '[j1-checker]');
   }
 }
 

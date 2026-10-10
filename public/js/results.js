@@ -12,7 +12,9 @@
   function escapeHtml(str) {
     const div = document.createElement('div');
     div.textContent = str ?? '';
-    return div.innerHTML;
+    // textContent -> innerHTML encodes & < >, but leaves quotes intact, which
+    // is unsafe inside an attribute. Encode them explicitly.
+    return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   function render() {
@@ -150,7 +152,7 @@
   function formatDate(value) {
     if (!value) return '—';
     const d = new Date(value);
-    return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString('en-US');
+    return Number.isNaN(d.getTime()) ? escapeHtml(String(value)) : d.toLocaleDateString('en-US');
   }
 
   function nonAffiliationDisclaimer(bare) {
