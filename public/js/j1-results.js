@@ -1,7 +1,8 @@
 /**
  * J-1 results page renderer. Layout order (agreed design):
  *   1. Eligibility finding
- *   2. Referral/agency CTA with consent (primary next-step, when eligible)
+ *   2. Referral/agency CTA with consent — DISABLED until referral partnerships
+ *      exist (kept commented out for easy restore)
  *   3. HPSA score / MUA details
  *   4. State Conrad 30 program link (secondary placement, still present);
  *      falls back to HRSA's PCO directory when no state page is on file
@@ -82,7 +83,9 @@
         ${j1.maxHpsaScore !== null && j1.maxHpsaScore !== undefined ? `<p>Highest HPSA score at this location: <strong>${escapeHtml(j1.maxHpsaScore)}</strong>.</p>` : ''}
       </div>`;
 
-    // 2. Referral/agency CTA with consent — primary next step, only when eligible
+    // 2. Referral/agency CTA with consent — disabled until referral
+    //    partnerships exist; uncomment to restore.
+    /*
     if (j1.meetsBaseline) {
       html += `
       <div class="card">
@@ -99,6 +102,7 @@
         <p class="field__hint" style="margin-top:0.75rem;">Some links here go to organizations we partner with. We may receive a referral fee or commission if you connect with them or accept a position.</p>
       </div>`;
     }
+    */
 
     // 3. HPSA score / MUA details
     const activeHpsa = (j1.hpsaByDiscipline || []).filter((d) => d.eligibleFeatures?.length > 0);
@@ -154,6 +158,7 @@
 
     root.innerHTML = html;
 
+    /*
     const seeEmployersBtn = document.getElementById('see-employers-btn');
     if (seeEmployersBtn) {
       seeEmployersBtn.addEventListener('click', () => {
@@ -174,6 +179,7 @@
         seeEmployersBtn.disabled = true;
       });
     }
+    */
   }
 
   function labelForDiscipline(discipline) {
