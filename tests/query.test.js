@@ -4,7 +4,7 @@ import { parseHpsaAttributes, isGeographicHpsa, isCurrentlyDesignated } from '..
 
 const rawFeature = {
   HPSA_SOURCE_ID: '1234567890',
-  HPSA_TYP_CD: '1',
+  HPSA_TYP_CD: 'Hpsa Geo',
   HPSA_TYP_DESC: 'Geographic HPSA',
   HPSA_SCORE: 18,
   HPSA_STATUS_CD: 'D',
@@ -13,7 +13,7 @@ const rawFeature = {
   RURAL_STATUS_DESC: 'Rural',
   HPSA_DESIGNATION_DT: '2024-01-01',
   HPSA_WITHDRAWAL_DT: null,
-  HPSA_POPULATION_TYP_CD: null,
+  HPSA_POPULATION_TYP_CD: 'TRC',
   DISCIPLINE_CLASS_DESC: 'Primary Care',
   PRIMARY_STATE_NM: 'Kansas',
   PRIMARY_STATE_FIPS_CD: '20',
@@ -23,16 +23,21 @@ test('parses raw ArcGIS attributes into the normalized shape', () => {
   const parsed = parseHpsaAttributes(rawFeature);
   assert.equal(parsed.hpsa_source_id, '1234567890');
   assert.equal(parsed.hpsa_status_desc, 'Designated');
-  assert.equal(parsed.population_typ_cd, null);
+  assert.equal(parsed.population_typ_cd, 'TRC');
 });
 
-test('treats a null population_typ_cd as a geographic HPSA', () => {
+test('treats an "Hpsa Geo" type as a geographic HPSA', () => {
   const parsed = parseHpsaAttributes(rawFeature);
   assert.equal(isGeographicHpsa(parsed), true);
 });
 
-test('treats a populated population_typ_cd as NOT a geographic HPSA', () => {
-  const parsed = parseHpsaAttributes({ ...rawFeature, HPSA_POPULATION_TYP_CD: 'LI' });
+test('treats a population-group type ("Hpsa Pop") as NOT a geographic HPSA', () => {
+  const parsed = parseHpsaAttributes({ ...rawFeature, HPSA_TYP_CD: 'Hpsa Pop', HPSA_POPULATION_TYP_CD: 'LI' });
+  assert.equal(isGeographicHpsa(parsed), false);
+});
+
+test('treats a half-county type ("Hpsa Geo HN") as NOT a geographic HPSA', () => {
+  const parsed = parseHpsaAttributes({ ...rawFeature, HPSA_TYP_CD: 'Hpsa Geo HN' });
   assert.equal(isGeographicHpsa(parsed), false);
 });
 

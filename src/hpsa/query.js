@@ -85,17 +85,18 @@ export function parseHpsaAttributes(attrs) {
 }
 
 /**
- * A feature counts as a "geographic HPSA" for CMS bonus purposes when its
- * population-type code is null/blank (Section 5.1). Population-group and
- * facility designations are explicitly out of scope for the physician
- * bonus. Confirm against live sampling before relying on this in
- * production — HRSA has not published this as a fixed contract.
+ * A feature counts as a "geographic HPSA" for CMS bonus purposes when the
+ * HPSA type is "Hpsa Geo" (geographic). Population-group designations
+ * ("Hpsa Pop") are out of scope for the physician bonus. Verified against
+ * the live feed (2026-10): every geographic record carries
+ * HPSA_POPULATION_TYP_CD 'TRC' and blank population codes do not occur,
+ * so keying on population type would match no areas at all.
  *
  * @param {HpsaAttributes} feature
  * @returns {boolean}
  */
 export function isGeographicHpsa(feature) {
-  return feature.population_typ_cd === null || feature.population_typ_cd === '';
+  return feature.hpsa_typ_cd === 'Hpsa Geo';
 }
 
 /**

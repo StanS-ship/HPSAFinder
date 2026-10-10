@@ -16,9 +16,18 @@ export const CONRAD30_LINKS_LAST_VERIFIED = '2026-10-10';
  *
  * States intentionally NOT listed fall back to HRSA's live-maintained
  * Primary Care Office directory (HRSA_STATE_PCO_DIRECTORY_URL):
+ *   - ME: the former program page (…/rhpc/j1-visa-waiver-program.shtml)
+ *         was retired; the entry now links to Maine CDC's official
+ *         2026-2027 Guide to J-1 Waivers PDF, which the Rural Health and
+ *         Primary Care Program maintains.
+ *   - NC: the guidelines document previously hosted on ncdhhs.gov could
+ *         not be confirmed on the last verification pass.
  *   - OH: the current Ohio Department of Health program page URL could
  *         not be confirmed on the last verification pass.
  *   - PR: not researched.
+ *   - TN: the j1.html page under the Division of Health Disparities
+ *         Elimination could not be confirmed on the last verification
+ *         pass.
  *
  * Notes on a few entries:
  *   - IN: the Indiana Department of Health runs the program with the
@@ -48,7 +57,7 @@ export const CONRAD30_PROGRAM_PAGES = Object.freeze({
   KS: { agency: 'Kansas Department of Health and Environment', url: 'https://www.kdhe.ks.gov/261/J-1-Visa-Waiver-Program' },
   KY: { agency: 'Kentucky Cabinet for Health and Family Services', url: 'https://chfs.ky.gov/agencies/dph/dpqi/hcab/Pages/j1visawaiver.aspx' },
   LA: { agency: 'Louisiana Department of Health (Well-Ahead Louisiana)', url: 'https://www.wellaheadla.com/louisiana-conrad-30/' },
-  ME: { agency: 'Maine CDC Rural Health and Primary Care Program', url: 'https://www.maine.gov/dhhs/mecdc/public-health-systems/rhpc/j1-visa-waiver-program.shtml' },
+  ME: { agency: 'Maine CDC Rural Health and Primary Care Program', url: 'https://www1.maine.gov/dhhs/mecdc/sites/maine.gov.dhhs.mecdc/files/J-1%20Guide%202026-2027_0.pdf' },
   MD: { agency: 'Maryland Department of Health', url: 'https://health.maryland.gov/pophealth/pages/j-1-visa-waiver-program.aspx' },
   MA: { agency: 'Massachusetts Department of Public Health', url: 'https://www.mass.gov/how-to/apply-for-the-conrad-30-j-1-visa-waiver-program' },
   MI: { agency: 'Michigan Department of Health and Human Services', url: 'https://www.michigan.gov/mdhhs/doing-business/providers/medgrad/j1visa/j-1-visa-waiver-program-overview' },
