@@ -57,7 +57,7 @@
             Send message
           </button>
           <div id="contact-success" class="notice-box" hidden>Thanks for your message. We'll get back to you soon.</div>
-          <div id="contact-error" class="error-box" hidden>Please enter a message before sending.</div>
+          <div id="contact-error" class="error-box" hidden></div>
         </form>
       </div>
 
@@ -128,17 +128,56 @@
       var form = document.getElementById('contact-form');
       var success = document.getElementById('contact-success');
       var errorBox = document.getElementById('contact-error');
-      form.addEventListener('submit', function (e) {
+      var submitBtn = document.getElementById('contact-submit');
+      var apiUrl = 'https://ooiainkhknklownkcfsb.supabase.co/functions/v1/contact-form';
+      var anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vaWFpbmtoa25rbG93bmtjZnNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1OTY5NzcsImV4cCI6MjEwNzE3Mjk3N30.sZH_EdWnKOlaH8aoXKHm-2A_98KvXDqWORqpCrbNvgQ';
+
+      function showError(text) {
+        errorBox.textContent = text;
+        errorBox.hidden = false;
+      }
+
+      form.addEventListener('submit', async function (e) {
         e.preventDefault();
         success.hidden = true;
         errorBox.hidden = true;
+
+        var name = document.getElementById('contact-name').value.trim();
+        var email = document.getElementById('contact-email').value.trim();
         var msg = document.getElementById('contact-message').value.trim();
+
         if (!msg) {
-          errorBox.hidden = false;
+          showError('Please enter a message before sending.');
           return;
         }
-        success.hidden = false;
-        form.reset();
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showError('Please enter a valid email address.');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        try {
+          var res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + anonKey
+            },
+            body: JSON.stringify({ name: name, email: email, message: msg })
+          });
+          var data = null;
+          try { data = await res.json(); } catch (err) { /* non-JSON response */ }
+          if (!res.ok) {
+            showError((data && data.error) || 'Sorry, your message could not be sent. Please try again.');
+            return;
+          }
+          success.hidden = false;
+          form.reset();
+        } catch (err) {
+          showError('Sorry, your message could not be sent. Please try again.');
+        } finally {
+          submitBtn.disabled = false;
+        }
       });
     })();
   </script>
