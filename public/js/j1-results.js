@@ -125,7 +125,7 @@
         }
         ${
           j1.mua?.isInMua
-            ? `<p>Also within a designated MUA/MUP: <strong>${escapeHtml(j1.mua?.activeFeatures?.[0]?.service_area_name || 'details unavailable')}</strong> (${escapeHtml(j1.mua?.activeFeatures?.[0]?.designation_type_desc || 'designation details unavailable')}).</p>`
+            ? `<p>Also within a designated MUA/MUP${j1.mua?.activeFeatures?.[0] ? `: <strong>${escapeHtml(j1.mua.activeFeatures[0].service_area_name || 'details unavailable')}</strong> (${escapeHtml(j1.mua.activeFeatures[0].designation_type_desc || 'designation details unavailable')})` : ' (details unavailable)'}.</p>`
             : j1.mua?.error
               ? '<div class="notice-box">We could not check MUA/MUP status right now. The HPSA portion of this result is still shown.</div>'
               : '<p>Not within a currently designated MUA/MUP.</p>'

@@ -19,9 +19,13 @@ const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
 function callerIp(req: Request): string {
+  // The rightmost entry in X-Forwarded-For is the one added by the platform
+  // in front of this function; leftmost entries are client-supplied and
+  // spoofable, which would let a caller rotate fake IPs to dodge the limit.
   const forwarded = req.headers.get("x-forwarded-for") ?? "";
-  const first = forwarded.split(",")[0].trim();
-  return first || req.headers.get("cf-connecting-ip") || "unknown";
+  const entries = forwarded.split(",").map((s) => s.trim()).filter(Boolean);
+  const last = entries[entries.length - 1];
+  return last || req.headers.get("cf-connecting-ip") || "unknown";
 }
 
 async function hashIp(ip: string): Promise<string> {

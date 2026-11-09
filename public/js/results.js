@@ -162,7 +162,9 @@
         <h2>Medically Underserved Area/Population (MUA/MUP) status</h2>
         ${
           mua.isInMua
-            ? `<p>This location <strong>is</strong> within a designated MUA/MUP: <strong>${escapeHtml(activeFeature.service_area_name)}</strong> (${escapeHtml(activeFeature.designation_type_desc)}, ${escapeHtml(activeFeature.service_area_type_desc)}).</p>`
+            ? activeFeature
+              ? `<p>This location <strong>is</strong> within a designated MUA/MUP: <strong>${escapeHtml(activeFeature.service_area_name)}</strong> (${escapeHtml(activeFeature.designation_type_desc)}, ${escapeHtml(activeFeature.service_area_type_desc)}).</p>`
+              : `<p>This location <strong>is</strong> within a designated MUA/MUP (details unavailable).</p>`
             : `<p>This location is <strong>not</strong> within a currently designated MUA/MUP.</p>`
         }
         <div class="disclaimer">${escapeHtml(mua.note)}</div>
